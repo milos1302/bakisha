@@ -1,0 +1,33 @@
+version: '3.5'
+
+networks:
+  fuc_net:
+    name: fuc_net
+
+services:
+  postgres:
+    image: postgres
+    container_name: postgres
+    environment:
+      - POSTGRES_PASSWORD=${DB_PASSWORD}
+    networks:
+      - fuc_net
+  django:
+    build:
+      context: .
+      dockerfile: django.Dockerfile
+    image: djanog_fuc
+    container_name: django
+    environment:
+      - DB_NAME=${DB_NAME}
+      - DB_USERNAME=${DB_USERNAME}
+      - DB_PASSWORD=${DB_PASSWORD}
+    networks:
+      - fuc_net
+    command: python manage.py runserver 0.0.0.0:8000
+    volumes:
+      - .:/code
+    ports:
+      - '8000:8000'
+    depends_on:
+      - postgres
