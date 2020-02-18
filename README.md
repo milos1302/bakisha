@@ -16,6 +16,18 @@
 6. Site is now available at [localhost:8000](http://localhost:8000/)
 
 ### pgAdmin
-If you skipped the optional setup of pgAdmin in the project setup, you can do it still do it afterwards.
-If containers are running, just stop them with `docker-compose stop`, and if you're not running them in detach mode, just press `CTRL + C` and they will stop.
-Now, just follow the instructions under the ***Setup pgAdmin*** step in **Project Setup**.  
+If you skipped the optional setup of pgAdmin in **Project Setup**, you can still do it afterwards.
+
+If the containers are running, just stop them with `docker-compose stop` (if you're not running them in detach mode, just press `CTRL + C`).
+Now, complete **4th** and **5th** step in **Project Setup**, and after you finish, pgAdmin will be available at [localhost:8888](http://localhost:8888/).
+
+In order to connect to the database server, you will have to add a new server:
+- Go to [localhost:8888](http://localhost:8888/)
+- Click on **Add New Server** (under ***Quick Links***)
+- Choose a name fot the server (General > Name)
+- Go to Connection tab and provide the necessary information:
+    - Host name/address: `postgres`
+    - Port: `5432`
+    - Username: `DB_USERNAME` value defined in `.env`
+    - Password: `DB_PASSWORD` value defined in `.env`     
+- Click on **Save** and the server should now appear under the **Servers** on the left
