@@ -1,8 +1,8 @@
 version: '3.5'
 
 networks:
-  fuc_net:
-    name: fuc_net
+  bakisha_net:
+    name: bakisha_net
 
 services:
   postgres:
@@ -13,19 +13,19 @@ services:
       - POSTGRES_USER=${DB_USERNAME}
       - POSTGRES_DB=${DB_NAME}
     networks:
-      - fuc_net
+      - bakisha_net
   django:
     build:
       context: .
       dockerfile: django.Dockerfile
-    image: djanog_fuc
+    image: bakisha/django:1.0
     container_name: django
     environment:
       - DB_NAME=${DB_NAME}
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
     networks:
-      - fuc_net
+      - bakisha_net
     volumes:
       - .:/code
     ports:
@@ -33,4 +33,3 @@ services:
     depends_on:
       - postgres
     command: ['./wait-for-it.sh', 'postgres:5432', '--', 'python', 'manage.py', 'runserver', '0.0.0.0:8000']
-
