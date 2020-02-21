@@ -32,9 +32,9 @@ values to any  of your choices.
 
 ### <a name="#create-superuser">Create Superuser</a>
 
-In order to access admin dashboard you'll need to create a superuser. Open you terminal and make sure that 
+In order to access admin dashboard you'll need to create a superuser. Open your terminal and make sure that 
 ***django*** and ***postgres*** containers are running. Now, do the following steps:
- 1. SSH into ***djanog*** container: `docker exec -it django bash`
+ 1. SSH into ***django*** container: `docker exec -it django bash`
  2. Create a superuser: `python manage.py createsuperuser`
  3. Fill up all the information
  4. Exit the container: `exit`  
@@ -48,7 +48,7 @@ In order to access admin dashboard you'll need to create a superuser. Open you t
 In order to connect to the database server, you will have to add a new server:
 - Go to [localhost:8888](http://localhost:8888/)
 - Click on **Add New Server** (under ***Quick Links***)
-- Choose a name fot the server (General > Name)
+- Choose a name for the server (General > Name)
 - Go to Connection tab and provide the necessary information:
     - Host name/address: `postgres`
     - Port: `5432`
@@ -68,9 +68,9 @@ are located in [docker folder](/docker) under the same name as their service (`c
 Docker services (containers) used in this project:
 - **django** - This docker container is being built with a custom [Dockerfile](/docker/django/Dockerfile) where 
 [python:3](https://hub.docker.com/_/python) image is being extended.
-This Dockerfile will create django project with the provided [requirements.txt](/app/requirements.txt) file
+This Dockerfile will create the django project with the provided [requirements.txt](/app/requirements.txt) file
 and it will make and run migrations at the end of the build.
-Each start of the django container will start the django server, and django application will be available at 
+Each start of the django container will start the django server, and the site will be available at 
 [localhost:8000](http://localhost:8000/).
 
 - **postgres** ([postgres](https://hub.docker.com/_/postgres) image)
