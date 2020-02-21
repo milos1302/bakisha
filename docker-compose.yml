@@ -13,7 +13,7 @@ services:
   django:
     build:
       context: .
-      dockerfile: django.Dockerfile
+      dockerfile: ./docker/django/Dockerfile
     image: bakisha/django:1.0
     container_name: django
     environment:
@@ -21,20 +21,20 @@ services:
       - DB_USERNAME=${DB_USERNAME}
       - DB_PASSWORD=${DB_PASSWORD}
     volumes:
-      - .:/code
+      - ./app:/app
     ports:
       - '8000:8000'
     depends_on:
       - postgres
-    command: ['./wait-for-it.sh', 'postgres:5432', '--', 'python', 'manage.py', 'runserver', '0.0.0.0:8000']
+    command: ['./../wait-for-it.sh', 'postgres:5432', '--', 'python', 'manage.py', 'runserver', '0.0.0.0:8000']
 
-#  pgadmin4:
-#    image: dpage/pgadmin4
-#    container_name: pgadmin4
-#    environment:
-#      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-#      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-#    ports:
-#      - '8888:80'
-#    depends_on:
-#      - postgres
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin4
+    environment:
+      - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+      - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    ports:
+      - '8888:80'
+    depends_on:
+      - postgres

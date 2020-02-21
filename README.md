@@ -6,7 +6,7 @@
 2. Copy `example.env` file from the root directory, paste it under the same directory and rename it to `.env`. 
 3. Uncomment `DB_USERNAME` and `DB_PASSWORD` in `.env` and set their values to any of your choice.
 4. **[Optional]** Setup pgAdmin:
-    - Uncomment `pgadmin4` service configuration in `docker-compose.yml`
+    - Uncomment `pgadmin` service configuration in `docker-compose.yml`
     - Uncomment `PGADMIN_DEFAULT_EMAIL` and `PGADMIN_DEFAULT_PASSWORD` in `.env` and set their values to any  of your choice.
     - pgAdmin will be available at [localhost:8888](http://localhost:8888/) once you finish with the entire project setup
 5. Go to projects root directory and run:
