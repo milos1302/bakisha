@@ -2,11 +2,14 @@
 
 <br/>
 
-#### Content:
+#### CONTENT:
 
 - [Project Setup](#project-setup)
 - [pgAdmin Server](#pgadmin-server)
 - [Docker Containers](#docker-containers)
+
+#### Additional Documentation:
+- [PyCharm Configuration](README.pycharm.md)
 
 <br/>
 
