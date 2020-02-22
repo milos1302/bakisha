@@ -1,7 +1,7 @@
 <header class="site-header">
     <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
         <div class="container">
-            <a class="navbar-brand mr-4" href="/">Bakisha</a>
+            <a class="navbar-brand mr-4" href="{% url 'bakisha-home' %}">Bakisha</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
                     aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -9,8 +9,8 @@
             <div class="collapse navbar-collapse" id="navbarToggle">
                 <!-- Left Side Navigation -->
                 <div class="navbar-nav mr-auto">
-                    <a class="nav-item nav-link" href="/">Home</a>
-                    <a class="nav-item nav-link" href="#">About</a>
+                    <a class="nav-item nav-link" href="{% url 'bakisha-home' %}">Home</a>
+                    <a class="nav-item nav-link" href="{% url 'profile-list' %}">Players</a>
                 </div>
                 <!-- Right Side Navigation -->
                 <div class="navbar-nav">

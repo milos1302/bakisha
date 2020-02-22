@@ -6,7 +6,7 @@
             <img class="rounded-circle profile-img" src="{{ profile.image.url }}"
                  alt="{{ profile.user.username }} profile image">
             <div class="media-body">
-                <h2 class="account-heading">{{ profile.user.username }}</h2>
+                <h2 class="account-heading"><a href="{% url 'profile-detail' profile.user.id %}">{{ profile.user.username }}</a></h2>
                 <p class="text-secondary">{{ profile.user.email }}</p>
             </div>
         </div>
