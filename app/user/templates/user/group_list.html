@@ -1,0 +1,14 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+    {% for group in group_list %}
+        <div class="media m-4">
+            <img class="rounded list-img mr-4" src="{{ group.image.url }}"
+                 alt="{{ group.name }} group image">
+            <div class="media-body">
+                <h2><a href="{% url 'group-detail' group.slug %}">{{ group.name }}</a></h2>
+                <p>{{ group.user.email }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock content %}

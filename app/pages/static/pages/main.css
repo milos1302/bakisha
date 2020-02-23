@@ -7,34 +7,19 @@ body {
     border-radius: 50% !important;
 }
 
-.profile-img-sm {
+.list-img {
     height: 125px;
     width: 125px;
 }
 
-.profile-img-lg {
+.detail-img {
     height: 225px;
     width: 225px;
 }
 
-.game-img-sm {
-    height: 175px;
-    width: 175px;
-}
-
-.game-img-lg {
-    height: 250px;
-    width: 250px;
-}
-
 @media only screen and (max-width: 600px) {
-    .profile-img-lg {
-        height: 125px;
-        width: 125px;
-    }
-
-    .game-img-lg {
-        height: 175px;
-        width: 175px;
+    .detail-img {
+        height: 150px;
+        width: 150px;
     }
 }
