@@ -13,7 +13,11 @@
 
     <link rel="stylesheet" href="{% static 'pages/main.css' %}">
 
-    <title>{{ title }}</title>
+    {% if title %}
+        <title>Bakisha | {{ title }}</title>
+    {% else %}
+        <title>Bakisha</title>
+    {% endif %}
 </head>
 <body>
 

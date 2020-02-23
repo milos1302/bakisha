@@ -6,5 +6,5 @@ class ProfileDetailView(DetailView):
     model = Profile
 
 
-class PostListView(ListView):
+class ProfileListView(ListView):
     model = Profile
