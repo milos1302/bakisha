@@ -8,7 +8,7 @@
         {% endif %}
         <div class="media-body mt-5 ml-3">
             <h1 class="account-heading">
-                <a href="{% url 'game-detail' game.slug %}">{{ game.name }} {{ game.type.name }}</a>
+                {{ game.name }} {{ game.type.name }}
             </h1>
             <p class="text-secondary">{{ game.description }}</p>
         </div>
