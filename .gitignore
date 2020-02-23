@@ -20,6 +20,6 @@ tests/report/
 .env
 
 media/
-!media/images/user/profile/default.png
+!media/**/default.*
 
 .idea/

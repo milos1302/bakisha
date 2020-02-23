@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.template.defaultfilters import slugify
+from common.utils.images import resize_image
 
 
 class GameType(models.Model):
@@ -32,3 +33,4 @@ class Game(models.Model):
     def save(self, *args, **kwargs):
         self.slug = self.slug or slugify(self.name)
         super().save(args, kwargs)
+        resize_image(self.image.path, 300, 300)
