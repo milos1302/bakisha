@@ -130,3 +130,5 @@ MEDIA_URL = '/media/'
 
 # default is bootstrap2
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+
+LOGIN_REDIRECT_URL = 'bakisha-home'
