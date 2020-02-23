@@ -1,0 +1,28 @@
+<header class="site-header">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+        <div class="container">
+            <a class="navbar-brand mr-4" href="{% url 'bakisha-home' %}">Bakisha</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarToggle"
+                    aria-controls="navbarToggle" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarToggle">
+                <!-- Left Side Navigation -->
+                <div class="navbar-nav mr-auto">
+                    <a class="nav-item nav-link" href="{% url 'game-list' %}">Games</a>
+                    <a class="nav-item nav-link" href="{% url 'profile-list' %}">Players</a>
+                </div>
+                <!-- Right Side Navigation -->
+                <div class="navbar-nav">
+                    {% if user.is_authenticated %}
+                        <a class="nav-item nav-link" href="{% url 'my-profile' %}">My Profile</a>
+                        <a class="nav-item nav-link" href="{% url 'user-logout' %}">Logout</a>
+                    {% else %}
+                        <a class="nav-item nav-link" href="{% url 'user-login' %}">Login</a>
+                        <a class="nav-item nav-link" href="{% url 'user-signup' %}">Sign Up</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </nav>
+</header>
