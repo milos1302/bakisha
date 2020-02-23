@@ -3,7 +3,9 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 from common.utils.images import resize_image
-from user.models import Group
+
+
+# from user.models import Organization # ImportError (most likely due to a circular import)
 
 
 class GameType(models.Model):
@@ -20,7 +22,7 @@ class GameType(models.Model):
 class Game(models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey(GameType, on_delete=models.PROTECT)
-    group = models.ForeignKey(Group, on_delete=models.CASCADE)
+    # group = models.ForeignKey(Organization, on_delete=models.CASCADE)
     players = models.ManyToManyField(User, blank=True)
     image = models.ImageField(default='images/game/default.png', upload_to='images/game')
     slug = models.SlugField(unique=True, blank=True)

@@ -2,7 +2,7 @@ from django.views.generic import DetailView, ListView
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
-from .models import Profile, Group
+from .models import Profile, Organization
 from .forms import UserSignupForm, UserUpdateForm, ProfileUpdateForm
 
 
@@ -56,9 +56,9 @@ class ProfileListView(ListView):
     extra_context = {'title': 'Players'}
 
 
-class GroupDetailView(DetailView):
-    model = Group
+class OrganizationDetailView(DetailView):
+    model = Organization
 
 
-class GroupListView(ListView):
-    model = Group
+class OrganizationListView(ListView):
+    model = Organization

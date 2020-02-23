@@ -11,6 +11,6 @@ urlpatterns = [
     path('logout/', auth_view.LogoutView.as_view(template_name='user/logout.html'), name='user-logout'),
     path('my-profile/', views.my_profile, name='my-profile'),
 
-    path('groups/', views.GroupListView.as_view(), name='group-list'),
-    path('groups/<slug:slug>', views.GroupDetailView.as_view(), name='group-detail'),
+    path('organizations/', views.OrganizationListView.as_view(), name='organization-list'),
+    path('organizations/<slug:slug>', views.OrganizationDetailView.as_view(), name='organization-detail'),
 ]
