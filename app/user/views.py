@@ -1,6 +1,7 @@
 from django.views.generic import DetailView, ListView
 from django.contrib import messages
 from django.shortcuts import redirect, render
+from django.contrib.auth.decorators import login_required
 from .models import Profile
 from .forms import UserSignupForm
 
@@ -16,6 +17,11 @@ def signup(request):
     else:
         form = UserSignupForm()
     return render(request, 'user/signup.html', {'form': form})
+
+
+@login_required
+def my_profile(request):
+    return render(request, 'user/my_profile.html')
 
 
 class ProfileDetailView(DetailView):
