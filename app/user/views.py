@@ -1,5 +1,21 @@
 from django.views.generic import DetailView, ListView
+from django.contrib import messages
+from django.shortcuts import redirect, render
 from .models import Profile
+from .forms import UserSignupForm
+
+
+def signup(request):
+    if request.method == 'POST':
+        form = UserSignupForm(request.POST)
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            messages.success(request, f'Hi {username}! Your account has been created. You are now able to log in.')
+            return redirect('/')
+    else:
+        form = UserSignupForm()
+    return render(request, 'user/signup.html', {'form': form})
 
 
 class ProfileDetailView(DetailView):
