@@ -19,7 +19,9 @@ tests/report/
 
 .env
 
-media/
-!media/**/default.*
+app/media/images/game/*
+!app/media/images/game/default.*
+app/media/images/user/profile/*
+app/media/images/user/profile/default.*
 
 .idea/
