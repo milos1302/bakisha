@@ -5,9 +5,6 @@ from django.template.defaultfilters import slugify
 from common.utils.images import resize_image
 
 
-# from user.models import Organization # ImportError (most likely due to a circular import)
-
-
 class GameType(models.Model):
     """
     GameType objects can only be created in admin back office
@@ -22,7 +19,7 @@ class GameType(models.Model):
 class Game(models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey(GameType, on_delete=models.PROTECT)
-    # group = models.ForeignKey(Organization, on_delete=models.CASCADE)
+    organization = models.ForeignKey('organization.Organization', on_delete=models.CASCADE)
     players = models.ManyToManyField(User, blank=True)
     image = models.ImageField(default='images/game/default.png', upload_to='images/game')
     slug = models.SlugField(unique=True, blank=True)
@@ -35,5 +32,5 @@ class Game(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = self.slug or slugify(self.name)
-        super().save(args, kwargs)
+        super().save(*args, **kwargs)
         resize_image(self.image.path, 300, 300)

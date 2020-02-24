@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     'pages.apps.PagesConfig',
     'user.apps.UserConfig',
     'game.apps.GameConfig',
+    'organization.apps.OrganizationConfig',
     'crispy_forms',
     'django.contrib.admin',
     'django.contrib.auth',

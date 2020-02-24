@@ -13,7 +13,6 @@
                     <h2 class="account-heading">
                         <a href="{% url 'game-detail' game.slug %}">{{ game.name }} {{ game.type.name }}</a>
                     </h2>
-                    <p class="text-secondary">{{ game.description }}</p>
                 </div>
             </div>
         {% endfor %}
