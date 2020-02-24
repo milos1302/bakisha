@@ -12,4 +12,4 @@ class GameDetailView(DetailView):
 
 class GameCreateView(CreateView):
     model = Game
-    fields = ['type', 'name']
+    fields = ['name', 'type', 'organization']

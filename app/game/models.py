@@ -17,20 +17,20 @@ class GameType(models.Model):
 
 
 class Game(models.Model):
-    type = models.ForeignKey(GameType, on_delete=models.PROTECT)
     name = models.CharField(max_length=100)
-    description = models.TextField(blank=True)
-    image = models.ImageField(default='images/game/default.png', upload_to='images/game')
+    type = models.ForeignKey(GameType, on_delete=models.PROTECT)
+    organization = models.ForeignKey('organization.Organization', on_delete=models.CASCADE)
     players = models.ManyToManyField(User, blank=True)
+    image = models.ImageField(default='images/game/default.png', upload_to='images/game')
     slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
         return f'{self.name} {self.type.name}'
 
     def get_absolute_url(self):
-        return reverse('game-detail', kwargs={'pk': self.pk})
+        return reverse('game-detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
         self.slug = self.slug or slugify(self.name)
-        super().save(args, kwargs)
+        super().save(*args, **kwargs)
         resize_image(self.image.path, 300, 300)

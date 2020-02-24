@@ -10,27 +10,21 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
+        ('game', '0001_initial'),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='GameType',
-            fields=[
-                ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('name', models.CharField(max_length=100, unique=True)),
-                ('description', models.TextField(blank=True)),
-            ],
-        ),
-        migrations.CreateModel(
-            name='Game',
+            name='Organization',
             fields=[
                 ('id', models.AutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
                 ('name', models.CharField(max_length=100)),
-                ('image', models.ImageField(default='images/game/default.png', upload_to='images/game')),
+                ('image', models.ImageField(default='images/user/organization/default.png', upload_to='images/user/organization')),
                 ('slug', models.SlugField(blank=True, unique=True)),
-                ('players', models.ManyToManyField(blank=True, to=settings.AUTH_USER_MODEL)),
+                ('administrators', models.ManyToManyField(related_name='administrating_organizations', to=settings.AUTH_USER_MODEL)),
                 ('type', models.ForeignKey(on_delete=django.db.models.deletion.PROTECT, to='game.GameType')),
+                ('users', models.ManyToManyField(to=settings.AUTH_USER_MODEL)),
             ],
         ),
     ]

@@ -4,11 +4,11 @@
 
 {% block content %}
     <div class="media mb-5">
-        <img class="rounded profile-img-lg mr-5" src="{{ user.profile.image.url }}"
+        <img class="rounded detail-img mr-5" src="{{ user.profile.image.url }}"
              alt="{{ profile.user.username }} profile image">
         <div class="media-body mt-4">
-            <h2 class="account-heading">{{ user.username }}</h2>
-            <p class="text-secondary">{{ user.email }}</p>
+            <h2>{{ user.username }}</h2>
+            <p>{{ user.email }}</p>
         </div>
     </div>
     <form method="POST" enctype="multipart/form-data">

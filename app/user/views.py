@@ -54,3 +54,4 @@ class ProfileDetailView(DetailView):
 class ProfileListView(ListView):
     model = Profile
     extra_context = {'title': 'Players'}
+

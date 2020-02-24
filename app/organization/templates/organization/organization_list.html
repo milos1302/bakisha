@@ -1,0 +1,14 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+    {% for organization in organization_list %}
+        <div class="media m-4">
+            <img class="rounded list-img mr-4" src="{{ organization.image.url }}"
+                 alt="{{ organization.name }} organization image">
+            <div class="media-body">
+                <h2><a href="{% url 'organization-detail' organization.slug %}">{{ organization.name }}</a></h2>
+                <p>{{ organization.user.email }}</p>
+            </div>
+        </div>
+    {% endfor %}
+{% endblock content %}

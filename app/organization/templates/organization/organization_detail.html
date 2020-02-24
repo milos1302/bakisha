@@ -1,0 +1,12 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+    <div class="media m-4">
+        <img class="rounded detail-img mr-4" src="{{ organization.image.url }}"
+             alt="{{ organization.name }} organization image">
+        <div class="media-body">
+            <h2>{{ organization.name }}</h2>
+            <p>{{ organization.user.email }}</p>
+        </div>
+    </div>
+{% endblock content %}
