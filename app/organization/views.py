@@ -1,5 +1,5 @@
 from django.views.generic import DetailView, ListView, CreateView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Organization
 
 
@@ -22,9 +22,12 @@ class OrganizationListView(ListView):
         return context
 
 
-class OrganizationCreateView(LoginRequiredMixin, CreateView):
+class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Organization
     fields = ['name', 'type']
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Administrators').exists()
 
     def form_valid(self, form):
         organization = form.save()

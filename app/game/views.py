@@ -1,5 +1,5 @@
 from django.views.generic import CreateView, ListView, DetailView
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Game
 
 
@@ -16,6 +16,9 @@ class GameDetailView(DetailView):
         return context
 
 
-class GameCreateView(LoginRequiredMixin, CreateView):
+class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Game
     fields = ['name', 'organization']
+
+    def test_func(self):
+        return self.request.user.groups.filter(name='Administrators').exists()
