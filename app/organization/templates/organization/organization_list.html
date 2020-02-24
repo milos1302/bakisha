@@ -1,10 +1,10 @@
 {% extends 'pages/base.html' %}
 
 {% load define_action %}
-{% load in_group_action %}
+{% load in_group_filter %}
 
 {% block content %}
-    {% if request.user|has_group:'Administrators' %}
+    {% if request.user|has_group:'Administrators'%}
         <a class="btn btn-outline-primary" href="{% url 'organization-create' %}">Create New Organization</a>
     {% endif %}
     {% for organization in organization_list %}

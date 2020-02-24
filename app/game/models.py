@@ -24,7 +24,7 @@ class Game(models.Model):
     slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
-        return f'{self.name} {self.organization.type.name}'
+        return f'{self.name}'
 
     def get_absolute_url(self):
         return reverse('game-detail', kwargs={'slug': self.slug})

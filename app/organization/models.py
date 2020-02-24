@@ -15,7 +15,7 @@ class Organization(models.Model):
     created_by = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, related_name='created_by', blank=True)
 
     def __str__(self):
-        return f'{self.name} organization'
+        return f'{self.name}'
 
     def get_absolute_url(self):
         return reverse('organization-detail', kwargs={'slug': self.slug})
