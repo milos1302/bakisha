@@ -9,7 +9,7 @@ class Organization(models.Model):
     type = models.ForeignKey('game.GameType', on_delete=models.PROTECT)
     administrators = models.ManyToManyField(User, related_name='administrating_organizations')
     users = models.ManyToManyField(User)
-    image = models.ImageField(default='images/user/organization/default.png', upload_to='images/user/organization')
+    image = models.ImageField(default='images/organization/default.png', upload_to='images/organization')
     slug = models.SlugField(unique=True, blank=True)
 
     def __str__(self):
