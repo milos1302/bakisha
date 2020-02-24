@@ -6,7 +6,7 @@
              alt="{{ organization.name }} organization image">
         <div class="media-body">
             <h2>{{ organization.name }}</h2>
-            <p>{{ organization.user.email }}</p>
+            <h4>Created By: {{ created_by|default:'Unknown' }}</h4>
         </div>
     </div>
 {% endblock content %}

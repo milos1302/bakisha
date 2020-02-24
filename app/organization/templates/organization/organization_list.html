@@ -1,5 +1,7 @@
 {% extends 'pages/base.html' %}
 
+{% load define_action %}
+
 {% block content %}
     <a class="btn btn-outline-primary" href="{% url 'organization-create' %}">Create New Organization</a>
     {% for organization in organization_list %}
@@ -8,7 +10,10 @@
                  alt="{{ organization.name }} organization image">
             <div class="media-body">
                 <h2><a href="{% url 'organization-detail' organization.slug %}">{{ organization.name }}</a></h2>
-                <p>{{ organization.user.email }}</p>
+                {% if organization.created_by %}
+                    {% define organization.created_by.username as created_by %}
+                {% endif %}
+                <p>Created By: {{ created_by|default:'Unknown' }}</p>
             </div>
         </div>
     {% endfor %}
