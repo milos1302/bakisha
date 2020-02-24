@@ -9,6 +9,7 @@
 - [Docker Containers](#docker-containers)
 
 #### Additional Documentation:
+- [Dev Corner](#dev-corner)
 - [PyCharm Configuration](README.pycharm.md)
 
 <br/>
@@ -78,3 +79,12 @@ Each start of the django container will start the django server, and the site wi
 
 - **postgres** ([postgres](https://hub.docker.com/_/postgres) image)
 - **pgadmin** ([dpage/pgadmin4](https://hub.docker.com/r/dpage/pgadmin4) image)
+
+
+<br/>
+
+### <a name="#dev-corner">Dev Corner</a>
+
+**Django Container Aliases:**
+- `django` - alias for `python manage.py` 
+- `ll` - alias for `ls -la`
