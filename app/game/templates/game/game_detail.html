@@ -7,8 +7,11 @@
                  alt="{{ game.name }} {{ game.organization.type.name }} game image">
         {% endif %}
         <div class="media-body mt-5 ml-3">
-            <h1>{{ game.name }} {{ game.organization.type.name }}</h1>
-            <p>{{ game.description }}</p>
+            <h1>{{ game.name }}</h1>
+            <h3>Organiser: {{ game.organization.name }}</h3>
+            {% if game.description %}
+                <p>DESCRIPTION: {{ game.description }}</p>
+            {% endif %}
         </div>
     </div>
     <p>ADD PLAYER SECTION (NOT IMPLEMENTED)</p>

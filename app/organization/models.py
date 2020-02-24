@@ -4,13 +4,15 @@ from django.urls import reverse
 from django.template.defaultfilters import slugify
 from common.utils.images import resize_image
 
+
 class Organization(models.Model):
     name = models.CharField(max_length=100)
     type = models.ForeignKey('game.GameType', on_delete=models.PROTECT)
-    administrators = models.ManyToManyField(User, related_name='administrating_organizations')
-    users = models.ManyToManyField(User)
+    administrators = models.ManyToManyField(User, related_name='administrating_organizations', blank=True)
+    users = models.ManyToManyField(User, blank=True)
     image = models.ImageField(default='images/organization/default.png', upload_to='images/organization')
     slug = models.SlugField(unique=True, blank=True)
+    created_by = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, related_name='created_by', blank=True)
 
     def __str__(self):
         return f'{self.name} organization'
@@ -20,5 +22,7 @@ class Organization(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = self.slug or slugify(self.name)
+        if self.created_by:
+            self.administrators.add(self.created_by)
         super().save(*args, **kwargs)
         resize_image(self.image.path, 300, 300)
