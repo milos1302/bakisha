@@ -1,9 +1,12 @@
 {% extends 'pages/base.html' %}
 
 {% load define_action %}
+{% load in_group_action %}
 
 {% block content %}
-    <a class="btn btn-outline-primary" href="{% url 'organization-create' %}">Create New Organization</a>
+    {% if request.user|has_group:'Administrators' %}
+        <a class="btn btn-outline-primary" href="{% url 'organization-create' %}">Create New Organization</a>
+    {% endif %}
     {% for organization in organization_list %}
         <div class="media m-4">
             <img class="rounded list-img mr-4" src="{{ organization.image.url }}"
