@@ -9,6 +9,11 @@ class GameListView(ListView):
 class GameDetailView(DetailView):
     model = Game
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['players'] = self.object.players.all()
+        return context
+
 
 class GameCreateView(CreateView):
     model = Game

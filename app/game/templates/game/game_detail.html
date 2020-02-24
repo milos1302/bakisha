@@ -12,10 +12,18 @@
         </div>
     </div>
     <p>ADD PLAYER SECTION (NOT IMPLEMENTED)</p>
-    {% if game.players %}
+    {% if players|length > 0 %}
+        <p>Number of players: {{ players|length }}</p>
         <div>
-            {% for player in game.players %}
-                {% include 'user/profile_detail.html' with profile=player %}
+            {% for player in players %}
+                <div class="media m-2">
+                    <img class="rounded list-img" src="{{ player.profile.image.url }}"
+                         alt="{{ player.profile.user.username }} profile image">
+                    <div class="media-body ml-4">
+                        <h2>{{ player.profile.user.username }}</h2>
+                        <p>{{ player.profile.user.email }}</p>
+                    </div>
+                </div>
             {% endfor %}
         </div>
     {% else %}
