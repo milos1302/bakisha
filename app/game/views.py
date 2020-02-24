@@ -1,4 +1,5 @@
 from django.views.generic import CreateView, ListView, DetailView
+from django.contrib.auth.mixins import LoginRequiredMixin
 from .models import Game
 
 
@@ -15,6 +16,6 @@ class GameDetailView(DetailView):
         return context
 
 
-class GameCreateView(CreateView):
+class GameCreateView(LoginRequiredMixin, CreateView):
     model = Game
     fields = ['name', 'organization']
