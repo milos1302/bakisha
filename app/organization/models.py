@@ -12,7 +12,7 @@ class Organization(models.Model):
     users = models.ManyToManyField(User, blank=True)
     image = models.ImageField(default='images/organization/default.png', upload_to='images/organization')
     slug = models.SlugField(unique=True, blank=True)
-    created_by = models.OneToOneField(User, on_delete=models.SET_NULL, null=True, related_name='created_by', blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='org_created_by', blank=True)
 
     def __str__(self):
         return f'{self.name}'

@@ -22,6 +22,7 @@ class Game(models.Model):
     players = models.ManyToManyField(User, blank=True)
     image = models.ImageField(default='images/game/default.png', upload_to='images/game')
     slug = models.SlugField(unique=True, blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='game_created_by', blank=True)
 
     def __str__(self):
         return f'{self.name}'
