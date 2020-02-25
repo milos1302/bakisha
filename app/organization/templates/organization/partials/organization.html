@@ -1,0 +1,8 @@
+<div class="media m-4">
+    <img class="rounded detail-img mr-4" src="{{ organization.image.url }}"
+         alt="{{ organization.name }} organization image">
+    <div class="media-body mt-5">
+        <h2>{{ organization.name }}</h2>
+        <h4>Created By: {{ created_by|default:'Unknown' }}</h4>
+    </div>
+</div>

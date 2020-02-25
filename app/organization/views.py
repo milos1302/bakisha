@@ -1,4 +1,4 @@
-from django.views.generic import DetailView, ListView, CreateView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from .models import Organization
 
@@ -23,6 +23,7 @@ class OrganizationListView(ListView):
 
 class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Organization
+    template_name = 'organization/organization_create.html'
     fields = ['name', 'type']
 
     def test_func(self):
@@ -33,3 +34,8 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
         organization.created_by = self.request.user
         organization.save()
         return super().form_valid(form)
+
+class OrganizationUpdateView(UpdateView):
+    model = Organization
+    template_name = 'organization/organization_update.html'
+    fields = ['name', 'type']

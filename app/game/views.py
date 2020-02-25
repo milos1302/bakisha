@@ -19,6 +19,7 @@ class GameDetailView(DetailView):
 
 class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Game
+    template_name = 'game/game_create.html'
     form_class = GameCreateForm
 
     def test_func(self):

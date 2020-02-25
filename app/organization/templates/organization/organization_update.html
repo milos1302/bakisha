@@ -1,5 +1,7 @@
 {% extends 'pages/base.html' %}
 
+{% load crispy_forms_tags %}
+
 {% block content %}
     {% include 'organization/partials/organization.html' with organization=organization created_by=created_by %}
 {% endblock content %}
