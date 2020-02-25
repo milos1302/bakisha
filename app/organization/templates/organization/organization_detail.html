@@ -1,6 +1,7 @@
 {% extends 'pages/base.html' %}
 
 {% load is_org_admin_filter %}
+{% load is_org_owner_filter %}
 
 {% block content %}
     {% include 'organization/partials/organization.html' %}
@@ -23,5 +24,10 @@
         <a class="btn btn-outline-primary" href="{% url 'organization-update' organization.slug %}">
             Update Organization
         </a>
+        {% if request.user|is_org_owner:organization %}
+            <a class="btn btn-outline-danger" href="{% url 'organization-delete' organization.slug %}">
+                Delete Organization
+            </a>
+        {% endif %}
     {% endif %}
 {% endblock content %}

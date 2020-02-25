@@ -1,4 +1,4 @@
-from django.views.generic import DetailView, ListView, CreateView, UpdateView
+from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.urls import reverse
@@ -48,8 +48,15 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
 
     def form_valid(self, form):
         created_by = self.get_object().created_by
-        print("form.cleaned_data.get('members')", form.cleaned_data.get('members'))
         if created_by and not form.cleaned_data.get('members').filter(pk=created_by.pk).exists():
             # User which created the organization should always be a member of that organization
             form.cleaned_data['members'] = form.cleaned_data.get('members').union(User.objects.filter(pk=created_by.pk))
         return super().form_valid(form)
+
+
+class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
+    model = Organization
+    success_url = '/organizations'
+
+    def test_func(self):
+        return self.request.user == self.get_object().created_by
