@@ -3,7 +3,22 @@
 {% load is_org_admin_filter %}
 
 {% block content %}
-    {% include 'organization/partials/organization.html'%}
+    {% include 'organization/partials/organization.html' %}
+    <div class="mt-5 mb-5">
+        <h6>NUMBER OF MEMBERS: {{ members|length }}</h6>
+        <div class="mt-4">
+            {% for member in members %}
+                <div class="media m-2">
+                    <img class="rounded list-img" src="{{ member.profile.image.url }}"
+                         alt="{{ member.profile.user.username }} profile image">
+                    <div class="media-body ml-4">
+                        <h2>{{ member.profile.user.username }}</h2>
+                        <p>{{ member.profile.user.email }}</p>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
     {% if request.user|is_org_admin:organization %}
         <a class="btn btn-outline-primary" href="{% url 'organization-update' organization.slug %}">
             Update Organization

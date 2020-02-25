@@ -12,7 +12,8 @@ class Organization(models.Model):
     members = models.ManyToManyField(User, blank=True)
     image = models.ImageField(default='images/organization/default.png', upload_to='images/organization')
     slug = models.SlugField(unique=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='org_created_by', blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='org_created_by',
+                                   blank=True)
 
     def __str__(self):
         return f'{self.name}'
@@ -24,5 +25,6 @@ class Organization(models.Model):
         self.slug = self.slug or slugify(self.name)
         if self.created_by:
             self.administrators.add(self.created_by)
+            self.members.add(self.created_by)
         super().save(*args, **kwargs)
         resize_image(self.image.path, 300, 300)

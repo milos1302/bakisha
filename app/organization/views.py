@@ -7,13 +7,14 @@ from .models import Organization
 class OrganizationDetailView(DetailView):
     model = Organization
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['members'] = self.object.members.all()
+        return context
+
 
 class OrganizationListView(ListView):
     model = Organization
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        return context
 
 
 class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
