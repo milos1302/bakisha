@@ -1,5 +1,6 @@
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.contrib.auth.models import User
 from django.urls import reverse
 from .models import Organization
 
@@ -37,11 +38,18 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
 
 class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Organization
-    template_name = 'organization/organization_update.html'
     fields = ['name', 'type', 'members']
+    template_name = 'organization/organization_update.html'
 
     def test_func(self):
         is_administrator = self.request.user.groups.filter(name='Administrators').exists()
         is_org_admin = self.get_object().administrators.filter(id=self.request.user.id).exists()
-        # is_org_owner = self.get_object().created_by.id == self.request.user.id
         return is_administrator and is_org_admin
+
+    def form_valid(self, form):
+        created_by = self.get_object().created_by
+        print("form.cleaned_data.get('members')", form.cleaned_data.get('members'))
+        if created_by and not form.cleaned_data.get('members').filter(pk=created_by.pk).exists():
+            # User which created the organization should always be a member of that organization
+            form.cleaned_data['members'] = form.cleaned_data.get('members').union(User.objects.filter(pk=created_by.pk))
+        return super().form_valid(form)
