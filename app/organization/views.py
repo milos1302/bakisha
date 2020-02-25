@@ -1,5 +1,6 @@
 from django.views.generic import DetailView, ListView, CreateView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse
 from .models import Organization
 
 
@@ -29,11 +30,14 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
         organization.save()
         return super().form_valid(form)
 
+    def get_success_url(self):
+        return reverse('organization-update', kwargs={'slug': self.object.slug})
+
 
 class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Organization
     template_name = 'organization/organization_update.html'
-    fields = ['name', 'type']
+    fields = ['name', 'type', 'members']
 
     def test_func(self):
         is_administrator = self.request.user.groups.filter(name='Administrators').exists()
