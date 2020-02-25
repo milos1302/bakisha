@@ -4,20 +4,10 @@
 {% load in_group_filter %}
 
 {% block content %}
-    {% if request.user|has_group:'Administrators'%}
+    {% if request.user|has_group:'Administrators' %}
         <a class="btn btn-outline-primary" href="{% url 'organization-create' %}">Create New Organization</a>
     {% endif %}
     {% for organization in organization_list %}
-        <div class="media m-4">
-            <img class="rounded list-img mr-4" src="{{ organization.image.url }}"
-                 alt="{{ organization.name }} organization image">
-            <div class="media-body">
-                <h2><a href="{% url 'organization-detail' organization.slug %}">{{ organization.name }}</a></h2>
-                {% if organization.created_by %}
-                    {% define organization.created_by.username as created_by %}
-                {% endif %}
-                <p>Created By: {{ created_by|default:'Unknown' }}</p>
-            </div>
-        </div>
+        {% include 'organization/partials/organization.html' with organization=organization is_list_item=True %}
     {% endfor %}
 {% endblock content %}
