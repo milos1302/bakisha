@@ -23,7 +23,7 @@ class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     form_class = GameCreateForm
 
     def test_func(self):
-        return self.request.user.groups.filter(name='Administrators').exists()
+        return self.request.user.administrating_organizations.first() is not None
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
