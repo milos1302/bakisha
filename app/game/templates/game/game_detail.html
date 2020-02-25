@@ -10,11 +10,12 @@
         {% endif %}
         <div class="media-body mt-5 ml-3">
             <h1>{{ game.name }}</h1>
-            <h2>Organiser: {{ game.organization.name }}</h2>
+            <h4>Organiser: {{ game.organization.name }}</h4>
             {% if game.created_by %}
                 {% define game.created_by.username as created_by %}
             {% endif %}
-            <h2>Created By: {{ created_by|default:'Unknown' }}</h2>
+            <h4>Created By: {{ created_by|default:'Unknown' }}</h4>
+            <h6>Type: {{ game.type }}</h6>
             {% if game.description %}
                 <p>DESCRIPTION: {{ game.description }}</p>
             {% endif %}

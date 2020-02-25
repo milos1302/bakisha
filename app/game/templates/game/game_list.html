@@ -19,11 +19,11 @@
                     <h2 class="account-heading">
                         <a href="{% url 'game-detail' game.slug %}">{{ game.name }}</a>
                     </h2>
-                    <p>Organiser: {{ game.organization.name }}</p>
+                    <h6>Organiser: {{ game.organization.name }}</h6>
                     {% if game.created_by %}
                         {% define game.created_by.username as created_by %}
                     {% endif %}
-                    <p>Created By: {{ created_by|default:'Unknown' }}</p>
+                    <h6>Created By: {{ created_by|default:'Unknown' }}</h6>
                 </div>
             </div>
         {% endfor %}
