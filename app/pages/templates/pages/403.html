@@ -1,5 +1,10 @@
 {% extends 'pages/base.html' %}
 
 {% block content %}
-    <h1>{{ message }}</h1>
+    <h3 class="alert alert-danger text-center">{{ message }}</h3>
+    <div class="border-top pt-3">
+        <small class="text-muted">
+            <a href="{% url 'bakisha-home' %}">Home</a>
+        </small>
+    </div>
 {% endblock content %}

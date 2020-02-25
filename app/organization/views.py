@@ -11,17 +11,20 @@ class OrganizationDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['members'] = self.object.members.all()
+        context['title'] = self.object.name
         return context
 
 
 class OrganizationListView(ListView):
     model = Organization
+    extra_context = {'title': 'Organizations'}
 
 
 class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Organization
     template_name = 'organization/organization_create.html'
     fields = ['name', 'type']
+    extra_context = {'title': 'Create Organization'}
 
     def test_func(self):
         return self.request.user.groups.filter(name='Administrators').exists()
@@ -46,6 +49,11 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
         is_org_admin = self.get_object().administrators.filter(id=self.request.user.id).exists()
         return is_administrator and is_org_admin
 
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Update {self.object.name}'
+        return context
+
     def form_valid(self, form):
         created_by = self.get_object().created_by
         if created_by and not form.cleaned_data.get('members').filter(pk=created_by.pk).exists():
@@ -60,3 +68,8 @@ class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView
 
     def test_func(self):
         return self.request.user == self.get_object().created_by
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Delete {self.object.name}'
+        return context

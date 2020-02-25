@@ -6,6 +6,7 @@ from .forms import GameCreateForm
 
 class GameListView(ListView):
     model = Game
+    extra_context = {'title': 'Games'}
 
 
 class GameDetailView(DetailView):
@@ -14,6 +15,7 @@ class GameDetailView(DetailView):
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context['players'] = self.object.players.all()
+        context['title'] = self.object.name
         return context
 
 
@@ -21,6 +23,7 @@ class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Game
     template_name = 'game/game_create.html'
     form_class = GameCreateForm
+    extra_context = {'title': 'Create Game'}
 
     def test_func(self):
         return self.request.user.administrating_organizations.first() is not None
