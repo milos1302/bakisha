@@ -1,0 +1,39 @@
+{% load define_action %}
+
+{% if is_list_item %}
+    <div class="media mt-2 mb-2">
+        {% if game.image %}
+            <img class="rounded list-img" src="{{ game.image.url }}"
+                 alt="{{ game.name }} game image">
+        {% endif %}
+        <div class="media-body mt-2 ml-3">
+            <h2 class="account-heading">
+                <a href="{% url 'game-detail' game.slug %}">{{ game.name }}</a>
+            </h2>
+            <h6>Organiser: {{ game.organization.name }}</h6>
+            {% if game.created_by %}
+                {% define game.created_by.username as created_by %}
+            {% endif %}
+            <h6>Created By: {{ created_by|default:'Unknown' }}</h6>
+        </div>
+    </div>
+{% else %}
+    <div class="media mt-2 mb-2">
+        {% if game.image %}
+            <img class="rounded detail-img" src="{{ game.image.url }}"
+                 alt="{{ game.name }} game image">
+        {% endif %}
+        <div class="media-body mt-5 ml-3">
+            <h1>{{ game.name }}</h1>
+            <h4>Organiser: {{ game.organization.name }}</h4>
+            {% if game.created_by %}
+                {% define game.created_by.username as created_by %}
+            {% endif %}
+            <h4>Created By: {{ created_by|default:'Unknown' }}</h4>
+            <h6>Type: {{ game.type }}</h6>
+            {% if game.description %}
+                <p>DESCRIPTION: {{ game.description }}</p>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}

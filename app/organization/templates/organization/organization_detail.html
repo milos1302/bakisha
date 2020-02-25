@@ -3,7 +3,7 @@
 {% load is_org_admin_filter %}
 
 {% block content %}
-    {% include 'organization/partials/organization.html' with organization=organization %}
+    {% include 'organization/partials/organization.html'%}
     {% if request.user|is_org_admin:organization %}
         <a class="btn btn-outline-primary" href="{% url 'organization-update' organization.slug %}">
             Update Organization

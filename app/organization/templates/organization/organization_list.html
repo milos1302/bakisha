@@ -8,6 +8,6 @@
         <a class="btn btn-outline-primary" href="{% url 'organization-create' %}">Create New Organization</a>
     {% endif %}
     {% for organization in organization_list %}
-        {% include 'organization/partials/organization.html' with organization=organization is_list_item=True %}
+        {% include 'organization/partials/organization.html' with is_list_item=True %}
     {% endfor %}
 {% endblock content %}

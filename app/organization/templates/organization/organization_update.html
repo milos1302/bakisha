@@ -3,7 +3,7 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    {% include 'organization/partials/organization.html' with organization=organization %}
+    {% include 'organization/partials/organization.html' %}
     <div class="content-section">
         <form method="POST">
             {% csrf_token %}

@@ -10,22 +10,7 @@
     {% endif %}
     <div class="mt-5">
         {% for game in game_list %}
-            <div class="media mt-2 mb-2">
-                {% if game.image %}
-                    <img class="rounded list-img" src="{{ game.image.url }}"
-                         alt="{{ game.name }} game image">
-                {% endif %}
-                <div class="media-body mt-2 ml-3">
-                    <h2 class="account-heading">
-                        <a href="{% url 'game-detail' game.slug %}">{{ game.name }}</a>
-                    </h2>
-                    <h6>Organiser: {{ game.organization.name }}</h6>
-                    {% if game.created_by %}
-                        {% define game.created_by.username as created_by %}
-                    {% endif %}
-                    <h6>Created By: {{ created_by|default:'Unknown' }}</h6>
-                </div>
-            </div>
+            {% include 'game/partials/game.html' with is_list_item=True %}
         {% endfor %}
     </div>
 {% endblock content %}
