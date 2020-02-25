@@ -2,6 +2,7 @@
 
 {% load in_group_filter %}
 {% load is_org_admin_filter %}
+{% load define_action %}
 
 {% block content %}
     {% if request.user|has_group:'Administrators' and request.user|is_org_admin %}
@@ -14,10 +15,15 @@
                     <img class="rounded list-img" src="{{ game.image.url }}"
                          alt="{{ game.name }} game image">
                 {% endif %}
-                <div class="media-body mt-5 ml-3">
+                <div class="media-body mt-2 ml-3">
                     <h2 class="account-heading">
                         <a href="{% url 'game-detail' game.slug %}">{{ game.name }}</a>
                     </h2>
+                    <p>Organiser: {{ game.organization.name }}</p>
+                    {% if game.created_by %}
+                        {% define game.created_by.username as created_by %}
+                    {% endif %}
+                    <p>Created By: {{ created_by|default:'Unknown' }}</p>
                 </div>
             </div>
         {% endfor %}
