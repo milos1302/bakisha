@@ -1,5 +1,12 @@
 {% extends 'pages/base.html' %}
 
+{% load is_org_admin_filter %}
+
 {% block content %}
     {% include 'organization/partials/organization.html' with organization=organization created_by=created_by %}
+    {% if request.user|is_org_admin %}
+        <a class="btn btn-outline-primary" href="{% url 'organization-update' organization.slug %}">
+            Update Organization
+        </a>
+    {% endif %}
 {% endblock content %}
