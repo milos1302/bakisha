@@ -5,7 +5,7 @@
 {% load define_action %}
 
 {% block content %}
-    {% if request.user|has_group:'Administrators' and request.user|is_org_admin %}
+    {% if request.user|in_group:'Administrators' and request.user|is_org_admin %}
         <a class="btn btn-outline-primary" href="{% url 'game-create' %}">Create New Game</a>
     {% endif %}
     <div class="mt-5">

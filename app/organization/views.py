@@ -41,5 +41,6 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
 
     def test_func(self):
         is_administrator = self.request.user.groups.filter(name='Administrators').exists()
-        is_org_owner = self.get_object().created_by.id == self.request.user.id
-        return is_administrator and is_org_owner
+        is_org_admin = self.get_object().administrators.filter(id=self.request.user.id).exists()
+        # is_org_owner = self.get_object().created_by.id == self.request.user.id
+        return is_administrator and is_org_admin

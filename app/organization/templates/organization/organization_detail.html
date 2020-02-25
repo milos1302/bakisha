@@ -4,7 +4,7 @@
 
 {% block content %}
     {% include 'organization/partials/organization.html' with organization=organization %}
-    {% if request.user|is_org_admin %}
+    {% if request.user|is_org_admin:organization %}
         <a class="btn btn-outline-primary" href="{% url 'organization-update' organization.slug %}">
             Update Organization
         </a>
