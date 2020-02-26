@@ -7,13 +7,13 @@ from common.utils.images import resize_image
 
 class Organization(models.Model):
     name = models.CharField(max_length=100)
-    type = models.ForeignKey('game.GameType', on_delete=models.PROTECT)
-    administrators = models.ManyToManyField(User, related_name='administrating_organizations', blank=True)
-    members = models.ManyToManyField(User, blank=True)
     image = models.ImageField(default='images/organization/default.png', upload_to='images/organization')
     slug = models.SlugField(unique=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='orgs_created_by',
-                                   blank=True)
+    type = models.ForeignKey('game.GameType', on_delete=models.PROTECT)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
+                                   related_name='created_organizations', blank=True)
+    administrators = models.ManyToManyField(User, related_name='administrating_organizations', blank=True)
+    members = models.ManyToManyField(User, blank=True)
 
     def __str__(self):
         return f'{self.name}'
