@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.models import User
+from django.contrib.auth.models import User, Group
 from django.urls import reverse
 from django.contrib import messages
 from common.utils.views import Operation, UserPassesTest
@@ -43,7 +43,7 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
 
 class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Organization
-    fields = ['name', 'type', 'members', 'image']
+    fields = ['name', 'type', 'members', 'image', 'administrators']
     template_name = 'organization/organization_update.html'
 
     def test_func(self):
@@ -57,6 +57,8 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
         form.fields['image'].required = False
+        form.fields['administrators'].queryset = User.objects.filter(groups__name='Administrators')
+        print('ADMINS', form.fields['administrators'].queryset)
         return form
 
     def form_valid(self, form):
@@ -72,7 +74,6 @@ class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView
     success_url = '/organizations'
 
     def test_func(self):
-        print('REQUEST', type(self.request))
         return UserPassesTest.user_passes_test_with_message(self.request, Operation.DELETE, Organization, self.get_object())
 
     def get_context_data(self, **kwargs):
