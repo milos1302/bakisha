@@ -15,5 +15,10 @@ class OrganizationAdmin(admin.ModelAdmin):
             kwargs['queryset'] = User.objects.filter(groups__name='Administrators')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
+    def formfield_for_dbfield(self, db_field, request, **kwargs):
+        if db_field.name == 'created_by':
+            self.exclude = ('created_by',)
+        return super().formfield_for_dbfield(db_field, request, **kwargs)
+
 
 admin.site.register(Organization, OrganizationAdmin)
