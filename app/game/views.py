@@ -1,5 +1,6 @@
-from django.views.generic import CreateView, ListView, DetailView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.urls import reverse
 from .models import Game
 from .forms import GameCreateForm
 
@@ -32,3 +33,24 @@ class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         kwargs = super().get_form_kwargs()
         kwargs['user'] = self.request.user
         return kwargs
+
+    def get_success_url(self):
+        return reverse('game-update', kwargs={'slug': self.object.slug})
+
+class GameUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
+    model = Game
+    template_name = 'game/game_update.html'
+    fields = ['name', 'players', 'image']
+
+    def test_func(self):
+        return self.get_object().organization.administrators.filter(pk=self.request.user.pk).exists()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Update {self.object.name}'
+        return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['image'].required = False
+        return form

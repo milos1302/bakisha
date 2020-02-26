@@ -1,10 +1,11 @@
 {% extends 'pages/base.html' %}
 
 {% load define_action %}
+{% load is_org_admin_filter %}
 
 {% block content %}
     {% include 'game/partials/game.html' %}
-    <div class="mt-5">
+    <div class="mt-5 mb-5">
         {% if players|length > 0 %}
             <h6>NUMBER OF PLAYERS: {{ players|length }}</h6>
             <div class="mt-4">
@@ -23,4 +24,12 @@
             <h5>This game has no players jet.</h5>
         {% endif %}
     </div>
+    {% if request.user|is_org_admin:game.organization %}
+        <a class="btn btn-outline-primary" href="{% url 'game-update' game.slug %}">
+            Update Game
+        </a>
+        <a class="btn btn-outline-danger" href="#">
+            Delete Game
+        </a>
+    {% endif %}
 {% endblock content %}
