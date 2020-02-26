@@ -41,7 +41,7 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
 
 class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Organization
-    fields = ['name', 'type', 'members']
+    fields = ['name', 'type', 'members', 'image']
     template_name = 'organization/organization_update.html'
 
     def test_func(self):
@@ -53,6 +53,11 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
         context = super().get_context_data(**kwargs)
         context['title'] = f'Update {self.object.name}'
         return context
+
+    def get_form(self, form_class=None):
+        form = super().get_form(form_class)
+        form.fields['image'].required = False
+        return form
 
     def form_valid(self, form):
         created_by = self.get_object().created_by
