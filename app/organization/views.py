@@ -47,7 +47,8 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
     template_name = 'organization/organization_update.html'
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, Operation.UPDATE, Organization, self.get_object())
+        return UserPassesTest.user_passes_test_with_message(self.request, Operation.UPDATE, Organization,
+                                                            self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -61,10 +62,20 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
         return form
 
     def form_valid(self, form):
-        created_by = self.get_object().created_by
-        if created_by and not form.cleaned_data.get('members').filter(pk=created_by.pk).exists():
-            # User which created the organization should always be a member of that organization
+        organization = self.get_object()
+        created_by = organization.created_by
+        is_created_by_in_members = form.cleaned_data.get('members').filter(pk=created_by.pk).exists()
+        is_created_by_in_administrators = form.cleaned_data.get('administrators').filter(pk=created_by.pk).exists()
+        if created_by and self.request.user != created_by and (
+                not is_created_by_in_members or not is_created_by_in_administrators):
+            # Prevent user that did not create organization to remove owner from the organization's group and/or administrators
+            form.cleaned_data['administrators'] = form.cleaned_data.get('administrators').union(
+                User.objects.filter(pk=created_by.pk))
             form.cleaned_data['members'] = form.cleaned_data.get('members').union(User.objects.filter(pk=created_by.pk))
+            org_groups = '"administrators"' if not is_created_by_in_administrators else ''
+            org_groups += ' and ' if not is_created_by_in_administrators and not is_created_by_in_members else ''
+            org_groups += '"members"' if not is_created_by_in_members else ''
+            messages.error(self.request, f'You do not have permission to remove owner of "{organization.name}" from {org_groups}.')
         return super().form_valid(form)
 
 
@@ -73,7 +84,8 @@ class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView
     success_url = '/organizations'
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, Operation.DELETE, Organization, self.get_object())
+        return UserPassesTest.user_passes_test_with_message(self.request, Operation.DELETE, Organization,
+                                                            self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
