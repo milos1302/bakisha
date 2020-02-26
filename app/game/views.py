@@ -71,5 +71,5 @@ class GameDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
         return context
 
     def delete(self, request, *args, **kwargs):
-        messages.success(request, f'You have successfully deleted "{self.get_object().name}".')
+        messages.success(request, f'Game "{self.get_object().name}" has been successfully deleted.')
         return super().delete(request, *args, **kwargs)

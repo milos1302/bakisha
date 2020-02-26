@@ -2,6 +2,7 @@ from django.views.generic import DetailView, ListView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.urls import reverse
+from django.contrib import messages
 from .models import Organization
 
 
@@ -78,3 +79,7 @@ class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView
         context = super().get_context_data(**kwargs)
         context['title'] = f'Delete {self.object.name}'
         return context
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, f'Organization "{self.get_object().name}" has been successfully deleted.')
+        return super().delete(request, *args, **kwargs)
