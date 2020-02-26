@@ -6,6 +6,4 @@ def home(request):
 
 
 def handler403(request, exception=None):
-    return render(request, 'pages/403.html', {
-        'title': 'Denied', 'message': 'You do not have permission to perform this action!'
-    })
+    return render(request, 'pages/403.html', {'title': 'Permission Denied'})

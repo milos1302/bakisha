@@ -45,7 +45,11 @@ class GameUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     fields = ['name', 'players', 'image']
 
     def test_func(self):
-        return self.get_object().organization.administrators.filter(pk=self.request.user.pk).exists()
+        game = self.get_object()
+        self.permission_denied_message = f'You do not have permission to update "{game.name}". ' \
+                                         f'Only "{game.organization.name}" administrators can update this game.'
+        messages.error(self.request, self.permission_denied_message)
+        return game.organization.administrators.filter(pk=self.request.user.pk).exists()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -63,7 +67,11 @@ class GameDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
     success_url = '/games'
 
     def test_func(self):
-        return self.get_object().organization.administrators.filter(pk=self.request.user.pk).exists()
+        game = self.get_object()
+        self.permission_denied_message = f'You do not have permission to delete "{game.name}". ' \
+                                         f'Only "{game.organization.name}" administrators can delete this game.'
+        messages.error(self.request, self.permission_denied_message)
+        return game.organization.administrators.filter(pk=self.request.user.pk).exists()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

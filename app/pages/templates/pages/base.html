@@ -24,13 +24,8 @@
 {% include 'pages/header.html' %}
 
 <main role="main" class="container">
-    {% if messages %}
-        {% for message in messages %}
-            <div class="alert alert-{{ message.tags }}">
-                {{ message }}
-            </div>
-        {% endfor %}
-    {% endif %}
+    {% block top_content %}{% endblock top_content %}
+    {% include 'pages/partials/messages.html' %}
     {% block content %}{% endblock %}
 </main>
 

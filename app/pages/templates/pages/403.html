@@ -1,7 +1,9 @@
 {% extends 'pages/base.html' %}
 
+{% block top_content %}
+    <h3 class="mb-5">Permission Denied</h3>
+{% endblock top_content %}
 {% block content %}
-    <h3 class="alert alert-danger text-center">{{ message }}</h3>
     <div class="border-top pt-3">
         <small class="text-muted">
             <a href="{% url 'bakisha-home' %}">Home</a>

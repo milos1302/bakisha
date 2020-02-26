@@ -1,0 +1,12 @@
+{% load define_action %}
+
+{% if messages %}
+    {% for message in messages %}
+        {% if message.tags == 'error' %}
+            {% define 'danger' as message_type %}
+        {% endif %}
+        <div class="alert alert-{{ message_type|default:message.tags }} text-center">
+            {{ message }}
+        </div>
+    {% endfor %}
+{% endif %}
