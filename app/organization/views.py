@@ -3,7 +3,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages
+from common.utils.views import Operation, UserPassesTest
 from .models import Organization
+
+
+class OrganizationListView(ListView):
+    model = Organization
+    extra_context = {'title': 'Organizations'}
 
 
 class OrganizationDetailView(DetailView):
@@ -16,11 +22,6 @@ class OrganizationDetailView(DetailView):
         return context
 
 
-class OrganizationListView(ListView):
-    model = Organization
-    extra_context = {'title': 'Organizations'}
-
-
 class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     model = Organization
     template_name = 'organization/organization_create.html'
@@ -28,7 +29,7 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
     extra_context = {'title': 'Create Organization'}
 
     def test_func(self):
-        return self.request.user.groups.filter(name='Administrators').exists()
+        return UserPassesTest.user_passes_test_with_message(self.request, Operation.CREATE, Organization)
 
     def form_valid(self, form):
         organization = form.save()
@@ -46,9 +47,7 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
     template_name = 'organization/organization_update.html'
 
     def test_func(self):
-        is_administrator = self.request.user.groups.filter(name='Administrators').exists()
-        is_org_admin = self.get_object().administrators.filter(id=self.request.user.id).exists()
-        return is_administrator and is_org_admin
+        return UserPassesTest.user_passes_test_with_message(self.request, Operation.UPDATE, Organization, self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -73,7 +72,8 @@ class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView
     success_url = '/organizations'
 
     def test_func(self):
-        return self.request.user == self.get_object().created_by
+        print('REQUEST', type(self.request))
+        return UserPassesTest.user_passes_test_with_message(self.request, Operation.DELETE, Organization, self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
