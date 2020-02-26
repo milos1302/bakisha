@@ -18,12 +18,12 @@ class GameType(models.Model):
 
 class Game(models.Model):
     name = models.CharField(max_length=100)
-    organization = models.ForeignKey('organization.Organization', on_delete=models.CASCADE)
-    players = models.ManyToManyField(User, blank=True)
     image = models.ImageField(default='images/game/default.png', upload_to='images/game')
     slug = models.SlugField(unique=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='game_created_by', blank=True)
-    type = models.ForeignKey(GameType, on_delete=models.PROTECT)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='create_games', blank=True)
+    type = models.ForeignKey(GameType, on_delete=models.PROTECT, related_name='games')
+    organization = models.ForeignKey('organization.Organization', on_delete=models.CASCADE)
+    players = models.ManyToManyField(User, blank=True, related_name='games')
 
     def __str__(self):
         return f'{self.name}'
