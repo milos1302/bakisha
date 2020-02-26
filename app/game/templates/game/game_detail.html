@@ -28,7 +28,7 @@
         <a class="btn btn-outline-primary" href="{% url 'game-update' game.slug %}">
             Update Game
         </a>
-        <a class="btn btn-outline-danger" href="#">
+        <a class="btn btn-outline-danger" href="{% url 'game-delete' game.slug %}">
             Delete Game
         </a>
     {% endif %}

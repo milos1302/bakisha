@@ -1,0 +1,15 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+    <form method="POST">
+        {% csrf_token %}
+        <fieldset class="form-group">
+            <legend class="border-bottom mb-4">Delete Game</legend>
+            <h4>Are you sure you want to delete the game "{{ game.name }}"?</h4>
+        </fieldset>
+        <div class="form-group">
+            <button class="btn btn-outline-danger" type="submit">Yes, Delete</button>
+            <a class="btn btn-outline-secondary" href="{% url 'game-detail' game.slug %}">Cancel</a>
+        </div>
+    </form>
+{% endblock content %}

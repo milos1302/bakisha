@@ -1,6 +1,7 @@
-from django.views.generic import CreateView, ListView, DetailView, UpdateView
+from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
+from django.contrib import messages
 from .models import Game
 from .forms import GameCreateForm
 
@@ -37,6 +38,7 @@ class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     def get_success_url(self):
         return reverse('game-update', kwargs={'slug': self.object.slug})
 
+
 class GameUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Game
     template_name = 'game/game_update.html'
@@ -54,3 +56,20 @@ class GameUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         form = super().get_form(form_class)
         form.fields['image'].required = False
         return form
+
+
+class GameDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
+    model = Game
+    success_url = '/games'
+
+    def test_func(self):
+        return self.get_object().organization.administrators.filter(pk=self.request.user.pk).exists()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Delete {self.object.name}'
+        return context
+
+    def delete(self, request, *args, **kwargs):
+        messages.success(request, f'You have successfully deleted "{self.get_object().name}".')
+        return super().delete(request, *args, **kwargs)
