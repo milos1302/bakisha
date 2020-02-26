@@ -2,24 +2,15 @@
 
 {% load in_group_filter %}
 {% load is_org_admin_filter %}
+{% load define_action %}
 
 {% block content %}
-    {% if request.user|has_group:'Administrators' and request.user|is_org_admin %}
+    {% if request.user|in_group:'Administrators' and request.user|is_org_admin %}
         <a class="btn btn-outline-primary" href="{% url 'game-create' %}">Create New Game</a>
     {% endif %}
     <div class="mt-5">
         {% for game in game_list %}
-            <div class="media mt-2 mb-2">
-                {% if game.image %}
-                    <img class="rounded list-img" src="{{ game.image.url }}"
-                         alt="{{ game.name }} game image">
-                {% endif %}
-                <div class="media-body mt-5 ml-3">
-                    <h2 class="account-heading">
-                        <a href="{% url 'game-detail' game.slug %}">{{ game.name }}</a>
-                    </h2>
-                </div>
-            </div>
+            {% include 'game/partials/game.html' with is_list_item=True %}
         {% endfor %}
     </div>
 {% endblock content %}

@@ -1,12 +1,33 @@
 {% extends 'pages/base.html' %}
 
+{% load is_org_admin_filter %}
+{% load is_org_owner_filter %}
+
 {% block content %}
-    <div class="media m-4">
-        <img class="rounded detail-img mr-4" src="{{ organization.image.url }}"
-             alt="{{ organization.name }} organization image">
-        <div class="media-body">
-            <h2>{{ organization.name }}</h2>
-            <h4>Created By: {{ created_by|default:'Unknown' }}</h4>
+    {% include 'organization/partials/organization.html' %}
+    <div class="mt-5 mb-5">
+        <h6>NUMBER OF MEMBERS: {{ members|length }}</h6>
+        <div class="mt-4">
+            {% for member in members %}
+                <div class="media m-2">
+                    <img class="rounded list-img" src="{{ member.profile.image.url }}"
+                         alt="{{ member.profile.user.username }} profile image">
+                    <div class="media-body ml-4">
+                        <h2>{{ member.profile.user.username }}</h2>
+                        <p>{{ member.profile.user.email }}</p>
+                    </div>
+                </div>
+            {% endfor %}
         </div>
     </div>
+    {% if request.user|is_org_admin:organization %}
+        <a class="btn btn-outline-primary" href="{% url 'organization-update' organization.slug %}">
+            Update Organization
+        </a>
+        {% if request.user|is_org_owner:organization %}
+            <a class="btn btn-outline-danger" href="{% url 'organization-delete' organization.slug %}">
+                Delete Organization
+            </a>
+        {% endif %}
+    {% endif %}
 {% endblock content %}
