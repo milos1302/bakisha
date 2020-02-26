@@ -12,7 +12,7 @@ class OrganizationAdmin(admin.ModelAdmin):
         administrators.
         """
         if db_field.name == 'administrators':
-            kwargs['queryset'] = User.objects.filter(groups__name__in=['Administrators'])
+            kwargs['queryset'] = User.objects.filter(groups__name='Administrators')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
 
 
