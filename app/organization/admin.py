@@ -4,6 +4,7 @@ from .models import Organization
 
 
 class OrganizationAdmin(admin.ModelAdmin):
+    readonly_fields = ['created_by']
 
     def formfield_for_manytomany(self, db_field, request, **kwargs):
         """
@@ -14,11 +15,6 @@ class OrganizationAdmin(admin.ModelAdmin):
         if db_field.name == 'administrators':
             kwargs['queryset'] = User.objects.filter(groups__name='Administrators')
         return super().formfield_for_manytomany(db_field, request, **kwargs)
-
-    def formfield_for_dbfield(self, db_field, request, **kwargs):
-        if db_field.name == 'created_by':
-            self.exclude = ('created_by',)
-        return super().formfield_for_dbfield(db_field, request, **kwargs)
 
 
 admin.site.register(Organization, OrganizationAdmin)
