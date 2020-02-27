@@ -1,12 +1,5 @@
 {% extends 'pages/base.html' %}
 
 {% block content %}
-    <div class="media">
-        <img class="rounded detail-img" src="{{ profile.image.url }}"
-             alt="{{ profile.user.username }} profile image">
-        <div class="media-body ml-4">
-            <h2>{{ profile.user.username }}</h2>
-            <p>{{ profile.user.email }}</p>
-        </div>
-    </div>
+    {% include 'user/partials/profile.html' %}
 {% endblock content %}

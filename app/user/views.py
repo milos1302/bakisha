@@ -34,6 +34,7 @@ def my_profile(request):
         profile_form = ProfileUpdateForm(instance=request.user.profile)
 
     context = {
+        'profile': request.user.profile,
         'user_form': user_form,
         'profile_form': profile_form
     }
