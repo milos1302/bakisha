@@ -1,7 +1,30 @@
 from django import forms
 from .models import Organization
 
-class OrganizationAdminForm(forms.ModelForm):
+
+class OrganizationFormBase(forms.ModelForm):
+    owner = None
+
+    def clean(self):
+        data = super().clean()
+        owner = self.owner if self.owner is not None else self.cleaned_data['owner']
+        administrators = self.cleaned_data['administrators']
+        if owner and owner not in administrators:
+            raise forms.ValidationError(
+                f'You can\'t remove user "{owner.username}" from the Administrators because they are the owner of the organization!')
+
+        members = self.cleaned_data['members']
+        if owner and owner not in members:
+            raise forms.ValidationError(
+                f'You can\'t remove user "{owner.username}" from the Members because they are the owner of the organization!')
+        for administrator in administrators:
+            if administrator not in members:
+                raise forms.ValidationError(
+                    f'User "{administrator.username}" must be removed from the Administrators before they could be removed from the Members!')
+        return data
+
+
+class OrganizationAdminForm(OrganizationFormBase):
     class Meta:
         model = Organization
         fields = '__all__'
@@ -10,21 +33,8 @@ class OrganizationAdminForm(forms.ModelForm):
             'members': forms.CheckboxSelectMultiple
         }
 
-    def clean_administrators(self):
-        owner = self.cleaned_data.get('owner')
-        administrators = self.cleaned_data['administrators']
-        if owner and owner not in administrators:
-            raise forms.ValidationError('Owner must be an administrator of the organization!')
-        return administrators
 
-    def clean_members(self):
-        owner = self.cleaned_data.get('owner')
-        members = self.cleaned_data['members']
-        if owner and owner not in members:
-            raise forms.ValidationError('Owner must be a member of the organization!')
-        return members
-
-class OrganizationUpdateForm(forms.ModelForm):
+class OrganizationUpdateForm(OrganizationFormBase):
     class Meta:
         model = Organization
         fields = ['name', 'type', 'image', 'members', 'administrators']
@@ -32,3 +42,6 @@ class OrganizationUpdateForm(forms.ModelForm):
             'members': forms.CheckboxSelectMultiple,
             'administrators': forms.CheckboxSelectMultiple
         }
+
+    def set_owner(self, owner):
+        self.owner = owner
