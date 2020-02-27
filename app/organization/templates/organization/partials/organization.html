@@ -9,7 +9,8 @@
             {% if organization.created_by %}
                 {% define organization.created_by.username as created_by %}
             {% endif %}
-            <p>Created By: {{ created_by|default:'Unknown' }}</p>
+            <h6>Created By: {{ created_by|default:'Unknown' }}</h6>
+            <h6>Type: {{ organization.type }}</h6>
         </div>
     </div>
 {% else %}
@@ -22,10 +23,7 @@
                 {% define organization.created_by.username as created_by %}
             {% endif %}
             <h4>Created By: {{ created_by|default:'Unknown' }}</h4>
+            <h4>Type: {{ organization.type }}</h4>
         </div>
     </div>
 {% endif %}
-
-
-
-
