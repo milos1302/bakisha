@@ -6,7 +6,7 @@
             <img class="rounded list-img mr-4" src="{{ profile.image.url }}"
                  alt="{{ profile.user.username }} profile image">
             <div class="media-body">
-                <h2><a href="{% url 'profile-detail' profile.user.id %}">{{ profile.user.username }}</a></h2>
+                <h2><a href="{% url 'profile-detail' profile.slug %}">{{ profile.user.username }}</a></h2>
                 <p>{{ profile.user.email }}</p>
             </div>
         </div>
