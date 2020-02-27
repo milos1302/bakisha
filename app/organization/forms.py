@@ -20,7 +20,7 @@ class OrganizationFormBase(forms.ModelForm):
         for administrator in administrators:
             if administrator not in members:
                 raise forms.ValidationError(
-                    f'User "{administrator.username}" must be removed from the Administrators before they could be removed from the Members!')
+                    f'User "{administrator.username}" must be a Member because they are an Administrator of the organization!')
         return data
 
 
