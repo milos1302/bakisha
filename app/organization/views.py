@@ -4,6 +4,7 @@ from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages
 from common.utils.views import Operation, UserPassesTest
+from .forms import OrganizationUpdateForm
 from .models import Organization
 
 
@@ -42,7 +43,7 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
 
 class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Organization
-    fields = ['name', 'type', 'members', 'image', 'administrators']
+    form_class = OrganizationUpdateForm
     template_name = 'organization/organization_update.html'
 
     def test_func(self):
