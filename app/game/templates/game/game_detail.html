@@ -25,11 +25,13 @@
         {% endif %}
     </div>
     {% if request.user|is_org_admin:game.organization %}
-        <a class="btn btn-outline-primary" href="{% url 'game-update' game.slug %}">
-            Update Game
-        </a>
-        <a class="btn btn-outline-danger" href="{% url 'game-delete' game.slug %}">
-            Delete Game
-        </a>
+        <div class="mt-3 mb-5">
+            <a class="btn btn-outline-primary" href="{% url 'game-update' game.slug %}">
+                Update Game
+            </a>
+            <a class="btn btn-outline-danger" href="{% url 'game-delete' game.slug %}">
+                Delete Game
+            </a>
+        </div>
     {% endif %}
 {% endblock content %}

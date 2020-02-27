@@ -32,7 +32,7 @@ class Game(models.Model):
         return reverse('game-detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
-        self.slug = self.slug or slugify(self.name)
+        self.slug = slugify(self.name)
         self.type = self.organization.type
         self.created_by = self.organization.created_by
         super().save(*args, **kwargs)

@@ -22,7 +22,7 @@ class Organization(models.Model):
         return reverse('organization-detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
-        self.slug = self.slug or slugify(self.name)
+        self.slug = slugify(self.name)
         if self.created_by:
             self.administrators.add(self.created_by)
             self.members.add(self.created_by)

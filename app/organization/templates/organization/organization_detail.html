@@ -21,13 +21,15 @@
         </div>
     </div>
     {% if request.user|is_org_admin:organization %}
-        <a class="btn btn-outline-primary" href="{% url 'organization-update' organization.slug %}">
-            Update Organization
-        </a>
-        {% if request.user|is_org_owner:organization %}
-            <a class="btn btn-outline-danger" href="{% url 'organization-delete' organization.slug %}">
-                Delete Organization
+        <div class="mt-3 mb-5">
+            <a class="btn btn-outline-primary" href="{% url 'organization-update' organization.slug %}">
+                Update Organization
             </a>
-        {% endif %}
+            {% if request.user|is_org_owner:organization %}
+                <a class="btn btn-outline-danger" href="{% url 'organization-delete' organization.slug %}">
+                    Delete Organization
+                </a>
+            {% endif %}
+        </div>
     {% endif %}
 {% endblock content %}
