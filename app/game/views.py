@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.contrib import messages
 from common.utils.views import Operation, UserPassesTest
 from .models import Game
-from .forms import GameCreateForm
+from .forms import GameCreateForm, GameUpdateForm
 
 class GameListView(ListView):
     model = Game
@@ -42,7 +42,7 @@ class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
 class GameUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Game
     template_name = 'game/game_update.html'
-    fields = ['name', 'players', 'image']
+    form_class = GameUpdateForm
 
     def test_func(self):
         return UserPassesTest.user_passes_test_with_message(self.request, Operation.UPDATE, Game, self.get_object())

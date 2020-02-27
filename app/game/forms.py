@@ -12,3 +12,12 @@ class GameCreateForm(forms.ModelForm):
         user = kwargs.pop('user')
         super().__init__(*args, **kwargs)
         self.fields['organization'].queryset = Organization.objects.filter(administrators=user.id)
+
+class GameUpdateForm(forms.ModelForm):
+    class Meta:
+        model = Game
+        fields = ['name', 'players', 'image']
+        widgets = {
+            'players': forms.CheckboxSelectMultiple,
+        }
+
