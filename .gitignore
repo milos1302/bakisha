@@ -27,3 +27,5 @@ app/media/images/organization/*
 !app/media/images/organization/default.*
 
 .idea/
+
+*.sql
