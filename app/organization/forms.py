@@ -1,5 +1,4 @@
 from django import forms
-from django.contrib.auth.models import User
 from .models import Organization
 
 class OrganizationAdminForm(forms.ModelForm):
@@ -11,13 +10,19 @@ class OrganizationAdminForm(forms.ModelForm):
             'members': forms.CheckboxSelectMultiple
         }
 
-    def clean(self):
+    def clean_administrators(self):
         owner = self.cleaned_data.get('owner')
-        if owner:
-            owner_queryset = User.objects.filter(pk=self.cleaned_data.get('owner').pk)
-            self.cleaned_data['administrators'] = self.cleaned_data['administrators'].union(owner_queryset)
-            self.cleaned_data['members'] = self.cleaned_data['members'].union(owner_queryset)
-        return self.cleaned_data
+        administrators = self.cleaned_data['administrators']
+        if owner and owner not in administrators:
+            raise forms.ValidationError('Owner must be an administrator of the organization!')
+        return administrators
+
+    def clean_members(self):
+        owner = self.cleaned_data.get('owner')
+        members = self.cleaned_data['members']
+        if owner and owner not in members:
+            raise forms.ValidationError('Owner must be a member of the organization!')
+        return members
 
 class OrganizationUpdateForm(forms.ModelForm):
     class Meta:
