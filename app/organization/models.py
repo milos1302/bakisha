@@ -9,8 +9,8 @@ class Organization(models.Model):
     name = models.CharField(max_length=100)
     image = models.ImageField(default='images/organization/default.png', upload_to='images/organization')
     slug = models.SlugField(unique=True, blank=True)
-    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True,
-                                   related_name='created_organizations', blank=True)
+    created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_organizations')
+    owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='owning_organizations')
     administrators = models.ManyToManyField(User, related_name='administrating_organizations', blank=True)
     members = models.ManyToManyField(User, blank=True, related_name='subscribed_organizations')
     type = models.ForeignKey('game.GameType', on_delete=models.PROTECT)
@@ -23,8 +23,5 @@ class Organization(models.Model):
 
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
-        if self.created_by:
-            self.administrators.add(self.created_by)
-            self.members.add(self.created_by)
         super().save(*args, **kwargs)
         resize_image(self.image.path, 300, 300)

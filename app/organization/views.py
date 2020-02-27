@@ -1,6 +1,6 @@
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.models import User, Group
+from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages
 from common.utils.views import Operation, UserPassesTest
@@ -32,9 +32,8 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
         return UserPassesTest.user_passes_test_with_message(self.request, Operation.CREATE, Organization)
 
     def form_valid(self, form):
-        organization = form.save()
-        organization.created_by = self.request.user
-        organization.save()
+        form.instance.created_by = self.request.user
+        form.instance.owner = self.request.user
         return super().form_valid(form)
 
     def get_success_url(self):
