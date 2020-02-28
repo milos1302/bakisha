@@ -57,9 +57,14 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
 
     def get_form(self, form_class=None):
         form = super().get_form(form_class)
-        form.set_owner(self.get_object().owner)
+        owner = self.get_object().owner
+        form.set_owner(owner)
         form.fields['image'].required = False
-        form.fields['administrators'].queryset = User.objects.filter(groups__name='Administrators')
+        user = self.request.user
+        if user != owner:
+            form.fields['administrators'].queryset = User.objects.filter(pk=user.pk)
+        else:
+            form.fields['administrators'].queryset = User.objects.filter(groups__name='Administrators')
         return form
 
     def form_valid(self, form):
