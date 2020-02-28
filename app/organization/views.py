@@ -1,10 +1,9 @@
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.contrib.auth.models import User
 from django.urls import reverse
 from django.contrib import messages
 from common.utils.views import Operation, UserPassesTest
-from .forms import OrganizationUpdateForm
+from .forms import OrganizationUpdateForm, OrganizationOwnerUpdateForm
 from .models import Organization
 
 
@@ -43,7 +42,6 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
 
 class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Organization
-    form_class = OrganizationUpdateForm
     template_name = 'organization/organization_update.html'
 
     def test_func(self):
@@ -55,20 +53,17 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
         context['title'] = f'Update {self.object.name}'
         return context
 
-    def get_form(self, form_class=None):
-        form = super().get_form(form_class)
-        owner = self.get_object().owner
-        form.set_owner(owner)
-        form.fields['image'].required = False
-        user = self.request.user
-        if user != owner:
-            form.fields['administrators'].queryset = User.objects.filter(pk=user.pk)
-        else:
-            form.fields['administrators'].queryset = User.objects.filter(groups__name='Administrators')
-        return form
+    def get_form_class(self):
+        if self.request.user == self.get_object().owner:
+            return OrganizationOwnerUpdateForm
+        return OrganizationUpdateForm
 
-    def form_valid(self, form):
-        return super().form_valid(form)
+    def get_form_kwargs(self):
+        kwargs = super().get_form_kwargs()
+        kwargs.update({
+            'owner': self.get_object().owner,
+        })
+        return kwargs
 
 
 class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):

@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from .models import Organization
 
 
@@ -37,11 +38,25 @@ class OrganizationAdminForm(OrganizationFormBase):
 class OrganizationUpdateForm(OrganizationFormBase):
     class Meta:
         model = Organization
+        fields = ['name', 'type', 'image', 'members']
+        widgets = {
+            'members': forms.CheckboxSelectMultiple,
+        }
+
+    def __init__(self, owner, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['image'].required = False
+        self.owner = owner
+
+
+class OrganizationOwnerUpdateForm(OrganizationUpdateForm):
+    class Meta(OrganizationUpdateForm.Meta):
         fields = ['name', 'type', 'image', 'members', 'administrators']
         widgets = {
             'members': forms.CheckboxSelectMultiple,
             'administrators': forms.CheckboxSelectMultiple
         }
 
-    def set_owner(self, owner):
-        self.owner = owner
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['administrators'].queryset = User.objects.filter(groups__name='Administrators')
