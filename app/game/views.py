@@ -3,7 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
 from django.contrib import messages
 from common.enums import CrudOperations
-from common.utils.messages.user_passes_test import UserPassesTest
+from common.utils.user_passes_test import UserPassesTest
 from .models import Game
 from .forms import GameCreateForm, GameUpdateForm
 

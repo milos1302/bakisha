@@ -4,7 +4,7 @@ from django.core.handlers.wsgi import WSGIRequest
 from game.models import Game
 from organization.models import Organization
 from common.enums import CrudOperations
-from common.utils.files import get_full_file_path, load_json_file_as_dict
+from common.utils.messages import get_permission_denied_message
 
 
 class UserPassesTest(object):
@@ -30,7 +30,7 @@ class UserPassesTest(object):
 
         passes = UserPassesTest.__is_permission_denied(request, operation, model_class, model_instance)
         if not passes:
-            message = UserPassesTest.__get_permission_denied_message(operation, model_class, model_instance)
+            message = get_permission_denied_message(operation, model_class, model_instance)
             messages.error(request, message)
 
         return passes
@@ -56,24 +56,6 @@ class UserPassesTest(object):
         return False
 
     @staticmethod
-    def __get_permission_denied_message(operation, model_class, model_instance):
-
-        model_name = model_class.__name__
-        message_template = UserPassesTest.__get_permission_denied_message_template(model_name, operation.value)
-
-        message_args = {}
-        if operation in (CrudOperations.UPDATE, CrudOperations.DELETE):
-            if model_class == Organization:
-                message_args['organization'] = model_instance.name
-            if model_class == Game:
-                message_args['organization'] = model_instance.organization.name
-                message_args['game'] = model_instance.name
-        if operation == CrudOperations.CREATE and model_class == Organization:
-            message_args['group'] = 'Administrators'
-
-        return message_template.format(**message_args)
-
-    @staticmethod
     def __check_request(request):
         if not isinstance(request, WSGIRequest):
             raise TypeError(f'Invalid value for request! Got "{request}". Instance of "{WSGIRequest}" expected.')
@@ -93,8 +75,3 @@ class UserPassesTest(object):
         if model_instance is not None and not isinstance(model_instance, model_class):
             raise TypeError(f'model_instance "{model_instance}" is not an instance of model_class "{model_class}". '
                             f'model_instance and model_class need to match.')
-
-    @staticmethod
-    def __get_permission_denied_message_template(model, operation):
-        message_templates = load_json_file_as_dict(get_full_file_path('common/assets/permission_denied_messages.json'))
-        return message_templates[model][operation]
