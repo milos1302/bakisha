@@ -2,7 +2,8 @@ from django.views.generic import DetailView, ListView, CreateView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
 from django.contrib import messages
-from common.utils.views import Operation, UserPassesTest
+from common.enums import CrudOperations
+from common.utils.messages.user_passes_test import UserPassesTest
 from .forms import OrganizationUpdateForm, OrganizationOwnerUpdateForm
 from .models import Organization
 
@@ -29,7 +30,7 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
     extra_context = {'title': 'Create Organization'}
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, Operation.CREATE, Organization)
+        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.CREATE, Organization)
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
@@ -45,7 +46,7 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
     template_name = 'organization/organization_update.html'
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, Operation.UPDATE,
+        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.UPDATE,
                                                             Organization, self.get_object())
 
     def get_context_data(self, **kwargs):
@@ -71,7 +72,7 @@ class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView
     success_url = '/organizations'
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, Operation.DELETE,
+        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.DELETE,
                                                             Organization, self.get_object())
 
     def get_context_data(self, **kwargs):

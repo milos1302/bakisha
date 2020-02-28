@@ -1,5 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
+from common.utils.errors import raise_validation_error
+from common.enums import ValidationErrors
 from .models import Organization
 
 
@@ -9,19 +11,16 @@ class OrganizationFormBase(forms.ModelForm):
     def clean(self):
         data = super().clean()
         owner = self.owner if self.owner is not None else self.cleaned_data['owner']
-        administrators = self.cleaned_data['administrators']
-        if owner and owner not in administrators:
-            raise forms.ValidationError(
-                f'You can\'t remove user "{owner.username}" from the Administrators because they are the owner of the organization!')
-
+        administrators = self.cleaned_data.get('administrators')
         members = self.cleaned_data['members']
-        if owner and owner not in members:
-            raise forms.ValidationError(
-                f'You can\'t remove user "{owner.username}" from the Members because they are the owner of the organization!')
-        for administrator in administrators:
-            if administrator not in members:
-                raise forms.ValidationError(
-                    f'User "{administrator.username}" must be a Member because they are an Administrator of the organization!')
+
+        if administrators is not None:
+            if owner and owner not in administrators:
+                raise_validation_error(ValidationErrors.REMOVE_OWNER_FROM_ADMINS)
+            for administrator in administrators:
+                if administrator not in members:
+                    raise_validation_error(ValidationErrors.REMOVE_ADMIN_FROM_MEMBERS)
+
         return data
 
 

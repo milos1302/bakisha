@@ -1,19 +1,10 @@
-import os
-import json
-from bakisha import settings
-from enum import Enum, unique
 from django.contrib import messages
 from django.db.models import Model
 from django.core.handlers.wsgi import WSGIRequest
 from game.models import Game
 from organization.models import Organization
-
-
-@unique
-class Operation(Enum):
-    CREATE = 'CREATE'
-    UPDATE = 'UPDATE'
-    DELETE = 'DELETE'
+from common.enums import CrudOperations
+from common.utils.files import get_full_file_path, load_json_file_as_dict
 
 
 class UserPassesTest(object):
@@ -47,19 +38,19 @@ class UserPassesTest(object):
     @staticmethod
     def __is_permission_denied(request, operation, model_class, model_instance):
         if model_class == Organization:
-            if operation == Operation.CREATE:
+            if operation == CrudOperations.CREATE:
                 return request.user.groups.filter(name='Administrators').exists()
-            elif operation == Operation.UPDATE:
+            elif operation == CrudOperations.UPDATE:
                 is_administrator = request.user.groups.filter(name='Administrators').exists()
                 is_org_admin = model_instance.administrators.filter(id=request.user.id).exists()
                 return is_administrator and is_org_admin
-            elif operation == Operation.DELETE:
+            elif operation == CrudOperations.DELETE:
                 return request.user == model_instance.created_by
 
         if model_class == Game:
-            if operation == Operation.CREATE:
+            if operation == CrudOperations.CREATE:
                 return request.user.administrating_organizations.first() is not None
-            elif operation == Operation.UPDATE or operation == Operation.DELETE:
+            elif operation == CrudOperations.UPDATE or operation == CrudOperations.DELETE:
                 return model_instance.organization.administrators.filter(pk=request.user.pk).exists()
 
         return False
@@ -71,13 +62,13 @@ class UserPassesTest(object):
         message_template = UserPassesTest.__get_permission_denied_message_template(model_name, operation.value)
 
         message_args = {}
-        if operation in (Operation.UPDATE, Operation.DELETE):
+        if operation in (CrudOperations.UPDATE, CrudOperations.DELETE):
             if model_class == Organization:
                 message_args['organization'] = model_instance.name
             if model_class == Game:
                 message_args['organization'] = model_instance.organization.name
                 message_args['game'] = model_instance.name
-        if operation == Operation.CREATE and model_class == Organization:
+        if operation == CrudOperations.CREATE and model_class == Organization:
             message_args['group'] = 'Administrators'
 
         return message_template.format(**message_args)
@@ -89,8 +80,8 @@ class UserPassesTest(object):
 
     @staticmethod
     def __check_operation(operation):
-        if not isinstance(operation, Operation):
-            raise TypeError(f'Invalid value for operation! Got "{operation}". Instance of "{Operation}" expected.')
+        if not isinstance(operation, CrudOperations):
+            raise TypeError(f'Invalid value for operation! Got "{operation}". Instance of "{CrudOperations}" expected.')
 
     @staticmethod
     def __check_model_class(model_class):
@@ -105,7 +96,5 @@ class UserPassesTest(object):
 
     @staticmethod
     def __get_permission_denied_message_template(model, operation):
-        json_path = os.path.join(settings.BASE_DIR, 'common/utils/assets/permission_denied_messages.json')
-        with open(json_path) as message_templates_json:
-            message_templates = json.load(message_templates_json)
-            return message_templates[model][operation]
+        message_templates = load_json_file_as_dict(get_full_file_path('common/assets/permission_denied_messages.json'))
+        return message_templates[model][operation]

@@ -2,7 +2,8 @@ from django.views.generic import CreateView, ListView, DetailView, UpdateView, D
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
 from django.contrib import messages
-from common.utils.views import Operation, UserPassesTest
+from common.enums import CrudOperations
+from common.utils.messages.user_passes_test import UserPassesTest
 from .models import Game
 from .forms import GameCreateForm, GameUpdateForm
 
@@ -28,7 +29,7 @@ class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     extra_context = {'title': 'Create Game'}
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, Operation.CREATE, Game)
+        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.CREATE, Game)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -45,7 +46,7 @@ class GameUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     form_class = GameUpdateForm
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, Operation.UPDATE, Game, self.get_object())
+        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.UPDATE, Game, self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -63,7 +64,7 @@ class GameDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
     success_url = '/games'
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, Operation.DELETE, Game, self.get_object())
+        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.DELETE, Game, self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
