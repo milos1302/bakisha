@@ -1,0 +1,15 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+    {% include 'user/partials/account.html' %}
+    {% if request.user == account.user %}
+        <div class="mt-3 mb-5">
+            <a class="btn btn-outline-primary" href="{% url 'my-account' %}">
+                Update Account
+            </a>
+            <a class="btn btn-outline-danger" href="{% url 'account-deactivate' account.slug %}">
+                Deactivate Account
+            </a>
+        </div>
+    {% endif %}
+{% endblock content %}

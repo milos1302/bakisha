@@ -3,13 +3,13 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-    {% include 'user/partials/profile.html'  %}
+    {% include 'user/partials/account.html'  %}
     <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <fieldset class="form-group">
-            <legend class="border-bottom mb-4">Profile Info</legend>
+            <legend class="border-bottom mb-4">Account Info</legend>
             {{ user_form|crispy }}
-            {{ profile_form|crispy }}
+            {{ account_form|crispy }}
         </fieldset>
         <div class="form-group">
             <button class="btn btn-outline-info" type="submit">Update</button>

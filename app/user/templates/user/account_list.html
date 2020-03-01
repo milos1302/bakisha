@@ -1,0 +1,7 @@
+{% extends 'pages/base.html' %}
+
+{% block content %}
+    {% for account in account_list %}
+        {% include 'user/partials/account.html' with is_list_item=True %}
+    {% endfor %}
+{% endblock content %}

@@ -21,8 +21,8 @@ tests/report/
 
 app/media/images/game/*
 !app/media/images/game/default.*
-app/media/images/user/profile/*
-!app/media/images/user/profile/default.*
+app/media/images/user/account/*
+!app/media/images/user/account/default.*
 app/media/images/organization/*
 !app/media/images/organization/default.*
 

@@ -1,7 +1,0 @@
-{% extends 'pages/base.html' %}
-
-{% block content %}
-    {% for profile in profile_list %}
-        {% include 'user/partials/profile.html' with is_list_item=True %}
-    {% endfor %}
-{% endblock content %}

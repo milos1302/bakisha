@@ -9,7 +9,7 @@
     "UPDATE": "You do not have permission to update \"{organization}\". Only administrators of this organization can update it.",
     "DELETE": "You do not have permission to delete \"{organization}\". This organization can be deleted only by its owner."
   },
-  "Profile": {
-    "DELETE": "You do not have permission to deactivate this profile. This profile can only be deactivate by its owner: \"{owner}\"."
+  "Account": {
+    "DELETE": "You do not have permission to deactivate this account. This account can only be deactivate by its owner: \"{owner}\"."
   }
 }

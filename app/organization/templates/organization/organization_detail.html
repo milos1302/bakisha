@@ -9,11 +9,11 @@
         <div class="mt-4">
             {% for member in members %}
                 <div class="media m-2">
-                    <img class="rounded list-img" src="{{ member.profile.image.url }}"
-                         alt="{{ member.profile.user.username }} profile image">
+                    <img class="rounded list-img" src="{{ member.account.image.url }}"
+                         alt="{{ member.account.user.username }} account image">
                     <div class="media-body ml-4">
-                        <h2>{{ member.profile.user.username }}</h2>
-                        <p>{{ member.profile.user.email }}</p>
+                        <h2>{{ member.account.user.username }}</h2>
+                        <p>{{ member.account.user.email }}</p>
                     </div>
                 </div>
             {% endfor %}

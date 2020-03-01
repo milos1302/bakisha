@@ -1,0 +1,27 @@
+{% load define_action %}
+
+{% if is_list_item %}
+    <div class="media m-4">
+        <img class="rounded list-img mr-5" src="{{ account.image.url }}"
+             alt="{{ account.user.username }} account image">
+        <div class="media-body mt-4">
+            <h2><a href="{% url 'account-detail' account.slug %}">{{ account.user.username }}</a></h2>
+            <div class="mt-4">
+                <h5>EMAIL: {{ account.user.email }}</h5>
+            </div>
+        </div>
+    </div>
+{% else %}
+    <div class="media mt-5 mb-5">
+        <img class="rounded detail-img mr-5" src="{{ account.image.url }}"
+             alt="{{ account.user.username }} account image">
+        <div class="media-body mt-4">
+            <h2>{{ account.user.username }}</h2>
+            <div class="mt-4">
+                <h5>EMAIL: {{ account.user.email }}</h5>
+                <h5>FIRST NAME: {{ account.user.first_name|default:'Unknown' }}</h5>
+                <h5>LAST NAME: {{ account.user.last_name|default:'Unknown' }}</h5>
+            </div>
+        </div>
+    </div>
+{% endif %}

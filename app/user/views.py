@@ -7,8 +7,8 @@ from django.http import HttpResponseRedirect
 from common.utils.user_passes_test import UserPassesTest
 from common.enums import CrudOperations
 from common.utils.messages import Messenger
-from .models import Profile
-from .forms import UserSignupForm, UserUpdateForm, ProfileUpdateForm
+from .models import Account
+from .forms import UserSignupForm, UserUpdateForm, AccountUpdateForm
 
 
 def signup(request):
@@ -25,54 +25,54 @@ def signup(request):
 
 
 @login_required
-def my_profile(request):
+def my_account(request):
     if request.method == 'POST':
         user_form = UserUpdateForm(request.POST, instance=request.user)
-        profile_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-        if user_form.is_valid() and profile_form.is_valid():
+        account_form = AccountUpdateForm(request.POST, request.FILES, instance=request.user.account)
+        if user_form.is_valid() and account_form.is_valid():
             user_form.save()
-            profile_form.save()
+            account_form.save()
             messages.success(request, f'Your account has been updated!')
-            return redirect('my-profile')
+            return redirect('my-account')
     else:
         user_form = UserUpdateForm(instance=request.user)
-        profile_form = ProfileUpdateForm(instance=request.user.profile)
+        account_form = AccountUpdateForm(instance=request.user.account)
 
     context = {
-        'profile': request.user.profile,
+        'account': request.user.account,
         'user_form': user_form,
-        'profile_form': profile_form
+        'account_form': account_form
     }
 
-    return render(request, 'user/my_profile.html', context)
+    return render(request, 'user/my_account.html', context)
 
 
-class ProfileDetailView(DetailView):
-    model = Profile
+class AccountDetailView(DetailView):
+    model = Account
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        username = context['profile'].user.username
-        context['title'] = f"{username}'s profile"
+        username = context['account'].user.username
+        context['title'] = f"{username}'s account"
         return context
 
 
-class ProfileListView(ListView):
-    model = Profile
+class AccountListView(ListView):
+    model = Account
     extra_context = {'title': 'Players'}
 
     def get_queryset(self):
-        return Profile.objects.filter(user__is_active=True)
+        return Account.objects.filter(user__is_active=True)
 
 
-class ProfileDeactivateView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
-    model = Profile
+class AccountDeactivateView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Account
     success_url = '/'
     template_name_suffix = '_confirm_deactivate'
 
     def test_func(self):
         return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.DELETE,
-                                                            Profile, self.get_object())
+                                                            Account, self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -80,8 +80,8 @@ class ProfileDeactivateView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
         return context
 
     def delete(self, request, *args, **kwargs):
-        profile = self.get_object()
-        profile.user.is_active = False
-        profile.user.save()
-        Messenger.crud_success(self.request, CrudOperations.DELETE, profile)
+        account = self.get_object()
+        account.user.is_active = False
+        account.user.save()
+        Messenger.crud_success(self.request, CrudOperations.DELETE, account)
         return HttpResponseRedirect(self.success_url)
