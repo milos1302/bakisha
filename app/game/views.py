@@ -37,7 +37,7 @@ class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         return kwargs
 
     def get_success_url(self):
-        return reverse('game-update', kwargs={'slug': self.object.slug})
+        return reverse('game-detail', kwargs={'slug': self.object.slug})
 
 
 class GameUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):

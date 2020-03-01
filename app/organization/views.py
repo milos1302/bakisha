@@ -39,7 +39,7 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
         return super().form_valid(form)
 
     def get_success_url(self):
-        return reverse('organization-update', kwargs={'slug': self.object.slug})
+        return reverse('organization-detail', kwargs={'slug': self.object.slug})
 
 
 class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
