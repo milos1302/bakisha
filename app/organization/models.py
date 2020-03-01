@@ -12,7 +12,7 @@ class Organization(models.Model):
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='created_organizations')
     owner = models.ForeignKey(User, on_delete=models.PROTECT, related_name='owning_organizations')
     administrators = models.ManyToManyField(User, related_name='administrating_organizations', blank=True)
-    members = models.ManyToManyField(User, blank=True, related_name='subscribed_organizations')
+    members = models.ManyToManyField(User, blank=True, related_name='organizations')
     type = models.ForeignKey('game.GameType', on_delete=models.PROTECT)
 
     def __str__(self):
