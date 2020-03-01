@@ -43,11 +43,11 @@ class UserPassesTest(object):
     def __is_permission_denied(request, crud_operation, instance_class, instance):
         if instance_class == Organization:
             if crud_operation == CrudOperations.CREATE:
-                return request.user.groups.filter(name='Administrators').exists()
+                return request.user.account.subscription == Account.PAID
             elif crud_operation == CrudOperations.UPDATE:
-                is_administrator = request.user.groups.filter(name='Administrators').exists()
+                has_paid_subscriptions = request.user.account.subscription == Account.PAID
                 is_org_admin = instance.administrators.filter(id=request.user.id).exists()
-                return is_administrator and is_org_admin
+                return has_paid_subscriptions and is_org_admin
             elif crud_operation == CrudOperations.DELETE:
                 return request.user == instance.created_by
 
