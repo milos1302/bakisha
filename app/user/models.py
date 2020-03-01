@@ -1,6 +1,7 @@
 from django.db import models
 from django.urls import reverse
 from django.contrib.auth.models import User
+from django.template.defaultfilters import slugify
 from common.utils.images import resize_image
 
 
@@ -27,5 +28,6 @@ class Account(models.Model):
         return reverse('account-detail', kwargs={'slug': self.slug})
 
     def save(self, *args, **kwargs):
+        self.slug = slugify(self.user.username)
         super().save(*args, **kwargs)
         resize_image(self.image.path, 300, 300)
