@@ -1,7 +1,12 @@
-from django.views.generic import DetailView, ListView
+from django.views.generic import DetailView, ListView, DeleteView
 from django.contrib import messages
 from django.shortcuts import redirect, render
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
+from django.http import HttpResponseRedirect
+from common.utils.user_passes_test import UserPassesTest
+from common.enums import CrudOperations
+from common.utils.messages import Messenger
 from .models import Profile
 from .forms import UserSignupForm, UserUpdateForm, ProfileUpdateForm
 
@@ -55,3 +60,28 @@ class ProfileDetailView(DetailView):
 class ProfileListView(ListView):
     model = Profile
     extra_context = {'title': 'Players'}
+
+    def get_queryset(self):
+        return Profile.objects.filter(user__is_active=True)
+
+
+class ProfileDeactivateView(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
+    model = Profile
+    success_url = '/'
+    template_name_suffix = '_confirm_deactivate'
+
+    def test_func(self):
+        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.DELETE,
+                                                            Profile, self.get_object())
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['title'] = f'Delete {self.get_object().user.username}'
+        return context
+
+    def delete(self, request, *args, **kwargs):
+        profile = self.get_object()
+        profile.user.is_active = False
+        profile.user.save()
+        Messenger.crud_success(self.request, CrudOperations.DELETE, profile)
+        return HttpResponseRedirect(self.success_url)

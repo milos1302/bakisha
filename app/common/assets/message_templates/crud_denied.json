@@ -8,5 +8,8 @@
     "CREATE": "You do not have permission to create a new organization.",
     "UPDATE": "You do not have permission to update \"{organization}\". Only administrators of this organization can update it.",
     "DELETE": "You do not have permission to delete \"{organization}\". This organization can be deleted only by its owner."
+  },
+  "Profile": {
+    "DELETE": "You do not have permission to deactivate this profile. This profile can only be deactivate by its owner: \"{owner}\"."
   }
 }

@@ -10,4 +10,5 @@ urlpatterns = [
     path('logout/', auth_view.LogoutView.as_view(template_name='user/logout.html'), name='user-logout'),
     path('my-profile/', views.my_profile, name='my-profile'),
     path('<slug:slug>/', views.ProfileDetailView.as_view(), name='profile-detail'),
+    path('<slug:slug>/deactivate', views.ProfileDeactivateView.as_view(), name='profile-deactivate'),
 ]

@@ -3,8 +3,10 @@ from django.db.models import Model
 from django.core.handlers.wsgi import WSGIRequest
 from game.models import Game
 from organization.models import Organization
+from user.models import Profile
 from common.enums import CrudOperations
 from common.utils.messages import Messenger
+
 
 
 class UserPassesTest(object):
@@ -54,6 +56,11 @@ class UserPassesTest(object):
                 return request.user.administrating_organizations.first() is not None
             elif crud_operation == CrudOperations.UPDATE or crud_operation == CrudOperations.DELETE:
                 return instance.organization.administrators.filter(pk=request.user.pk).exists()
+
+        if instance_class == Profile:
+            if crud_operation == CrudOperations.DELETE:
+                return  request.user == instance.user
+
 
         return False
 

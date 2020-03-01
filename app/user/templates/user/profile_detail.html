@@ -7,8 +7,8 @@
             <a class="btn btn-outline-primary" href="{% url 'my-profile' %}">
                 Update Profile
             </a>
-            <a class="btn btn-outline-danger" href="#">
-                Delete Profile
+            <a class="btn btn-outline-danger" href="{% url 'profile-deactivate' profile.slug %}">
+                Deactivate Profile
             </a>
         </div>
     {% endif %}

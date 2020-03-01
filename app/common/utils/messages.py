@@ -6,6 +6,7 @@ from common.utils.errors import raise_type_error
 from common.enums import CrudOperations, MessageTypes, ValidationErrors
 from organization.models import Organization
 from game.models import Game
+from user.models import Profile
 
 
 class Messenger(object):
@@ -16,9 +17,12 @@ class Messenger(object):
         Messenger.__validate_crud_method_args(crud_operation, instance)
 
         message_args = {
-            'object_name': instance.name,
             'class_name': type(instance).__name__
         }
+        if type(instance) in (Game, Organization):
+            message_args['object_name'] = instance.name
+        if type(instance) == Profile:
+            message_args['object_name'] = instance.user.username
         message_template = Messenger.__get_message_template(MessageTypes.CRUD_SUCCESS, key=crud_operation.value)
         message = message_template.format(**message_args)
         messages.success(request, message)
@@ -33,6 +37,8 @@ class Messenger(object):
         if isinstance(instance, Game):
             message_args['game'] = instance.name
             message_args['organization'] = instance.organization.name
+        if isinstance(instance, Profile):
+            message_args['owner'] = instance.user.username
 
         first_key = instance_class.__name__ if instance_class is not None else type(instance).__name__
         message_template = Messenger.__get_nested_message_template(MessageTypes.CRUD_DENIED,
