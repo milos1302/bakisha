@@ -8,7 +8,6 @@ from common.enums import CrudOperations
 from common.utils.messages import Messenger
 
 
-
 class UserPassesTest(object):
 
     @staticmethod
@@ -59,8 +58,7 @@ class UserPassesTest(object):
 
         if instance_class == Account:
             if crud_operation == CrudOperations.DELETE:
-                return  request.user == instance.user
-
+                return request.user == instance.user
 
         return False
 

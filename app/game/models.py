@@ -18,7 +18,7 @@ class GameType(models.Model):
 
 class Game(models.Model):
     name = models.CharField(max_length=100)
-    image = models.ImageField(default='images/game/default.png', upload_to='images/game')
+    image = models.ImageField(default='images/app/game/default.png', upload_to='images/game')
     slug = models.SlugField(unique=True, blank=True)
     created_by = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='create_games', blank=True)
     type = models.ForeignKey(GameType, on_delete=models.PROTECT, related_name='games')

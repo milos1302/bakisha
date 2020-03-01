@@ -12,7 +12,7 @@ class Account(models.Model):
         (PAID, 'Paid')
     ]
     slug = models.SlugField(unique=True, blank=True)
-    image = models.ImageField(default='images/user/account/default.png', upload_to='images/user/account')
+    image = models.ImageField(default='images/app/user/account/default.png', upload_to='images/user/account')
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     subscription = models.CharField(
         max_length=2,

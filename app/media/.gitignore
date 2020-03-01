@@ -1,0 +1,4 @@
+# Ignore all subdiractories and files in this directory
+images/*
+# Do not ignore subdirectories and files in /app direcotry
+!images/app

@@ -18,14 +18,7 @@ build/
 tests/report/
 
 .env
-
-app/media/images/game/*
-!app/media/images/game/default.*
-app/media/images/user/account/*
-!app/media/images/user/account/default.*
-app/media/images/organization/*
-!app/media/images/organization/default.*
+*.sql
 
 .idea/
 
-*.sql
