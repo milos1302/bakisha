@@ -2,4 +2,14 @@
 
 {% block content %}
     {% include 'user/partials/profile.html' %}
+    {% if request.user == profile.user %}
+        <div class="mt-3 mb-5">
+            <a class="btn btn-outline-primary" href="{% url 'my-profile' %}">
+                Update Profile
+            </a>
+            <a class="btn btn-outline-danger" href="#">
+                Delete Profile
+            </a>
+        </div>
+    {% endif %}
 {% endblock content %}
