@@ -1,9 +1,9 @@
 from django.views.generic import DetailView, ListView, CreateView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
-from django.contrib import messages
 from common.enums import CrudOperations
 from common.utils.user_passes_test import UserPassesTest
+from common.utils.messages import Messenger
 from .forms import OrganizationUpdateForm, OrganizationOwnerUpdateForm
 from .models import Organization
 
@@ -35,7 +35,7 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         form.instance.owner = self.request.user
-        # TODO: add success message
+        Messenger.crud_success(self.request, CrudOperations.CREATE, form.instance)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -68,7 +68,7 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
         return kwargs
 
     def form_valid(self, form):
-        # TODO: add success message
+        Messenger.crud_success(self.request, CrudOperations.UPDATE, form.instance)
         return super().form_valid(form)
 
 
@@ -86,6 +86,5 @@ class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView
         return context
 
     def delete(self, request, *args, **kwargs):
-        # TODO replace this with messages handler
-        messages.success(request, f'Organization "{self.get_object().name}" has been successfully deleted.')
+        Messenger.crud_success(self.request, CrudOperations.DELETE, self.get_object())
         return super().delete(request, *args, **kwargs)

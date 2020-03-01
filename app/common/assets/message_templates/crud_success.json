@@ -1,0 +1,5 @@
+{
+  "CREATE": "You have successfully created \"{object_name}\"",
+  "UPDATE": "{class_name} \"{object_name}\" has been successfully updated.",
+  "DELETE": "{class_name} \"{object_name}\" has been successfully deleted."
+}

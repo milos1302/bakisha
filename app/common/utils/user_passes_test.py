@@ -4,54 +4,56 @@ from django.core.handlers.wsgi import WSGIRequest
 from game.models import Game
 from organization.models import Organization
 from common.enums import CrudOperations
-from common.utils.messages import get_permission_denied_message
+from common.utils.messages import Messenger
 
 
 class UserPassesTest(object):
 
     @staticmethod
-    def user_passes_test_with_message(request, operation, model_class, model_instance=None):
+    def user_passes_test_with_message(request, crud_operation, instance_class, instance=None):
         """
         Returns True if user passes the test, and False otherwise.
         It also sets the permission_denied_message to the passed
         view instance if user doesn't pass the test
 
         :param request: instance of WSGIRequest
-        :param operation: instance of Operation
-        :param model_class: subclass of Model
-        :param model_instance: instance of Model
+        :param crud_operation: instance of Operation
+        :param instance_class: subclass of Model
+        :param instance: instance of Model
         :return: boolean
         """
 
         UserPassesTest.__check_request(request)
-        UserPassesTest.__check_operation(operation)
-        UserPassesTest.__check_model_class(model_class)
-        UserPassesTest.__check_model_instance(model_instance, model_class)
+        UserPassesTest.__check_crud_operation(crud_operation)
+        UserPassesTest.__check_instance_class(instance_class)
+        UserPassesTest.__check_instance(instance, instance_class)
 
-        passes = UserPassesTest.__is_permission_denied(request, operation, model_class, model_instance)
+        passes = UserPassesTest.__is_permission_denied(request, crud_operation, instance_class, instance)
+        print('PASSES', passes)
         if not passes:
-            message = get_permission_denied_message(operation, model_class, model_instance)
+            message = Messenger.crud_denied(request, crud_operation, instance_class=instance_class,
+                                            instance=instance)
             messages.error(request, message)
 
         return passes
 
     @staticmethod
-    def __is_permission_denied(request, operation, model_class, model_instance):
-        if model_class == Organization:
-            if operation == CrudOperations.CREATE:
+    def __is_permission_denied(request, crud_operation, instance_class, instance):
+        if instance_class == Organization:
+            if crud_operation == CrudOperations.CREATE:
                 return request.user.groups.filter(name='Administrators').exists()
-            elif operation == CrudOperations.UPDATE:
+            elif crud_operation == CrudOperations.UPDATE:
                 is_administrator = request.user.groups.filter(name='Administrators').exists()
-                is_org_admin = model_instance.administrators.filter(id=request.user.id).exists()
+                is_org_admin = instance.administrators.filter(id=request.user.id).exists()
                 return is_administrator and is_org_admin
-            elif operation == CrudOperations.DELETE:
-                return request.user == model_instance.created_by
+            elif crud_operation == CrudOperations.DELETE:
+                return request.user == instance.created_by
 
-        if model_class == Game:
-            if operation == CrudOperations.CREATE:
+        if instance_class == Game:
+            if crud_operation == CrudOperations.CREATE:
                 return request.user.administrating_organizations.first() is not None
-            elif operation == CrudOperations.UPDATE or operation == CrudOperations.DELETE:
-                return model_instance.organization.administrators.filter(pk=request.user.pk).exists()
+            elif crud_operation == CrudOperations.UPDATE or crud_operation == CrudOperations.DELETE:
+                return instance.organization.administrators.filter(pk=request.user.pk).exists()
 
         return False
 
@@ -61,17 +63,18 @@ class UserPassesTest(object):
             raise TypeError(f'Invalid value for request! Got "{request}". Instance of "{WSGIRequest}" expected.')
 
     @staticmethod
-    def __check_operation(operation):
-        if not isinstance(operation, CrudOperations):
-            raise TypeError(f'Invalid value for operation! Got "{operation}". Instance of "{CrudOperations}" expected.')
+    def __check_crud_operation(crud_operation):
+        if not isinstance(crud_operation, CrudOperations):
+            raise TypeError(
+                f'Invalid value for crud_operation! Got "{crud_operation}". Instance of "{CrudOperations}" expected.')
 
     @staticmethod
-    def __check_model_class(model_class):
-        if not issubclass(model_class, Model):
-            raise TypeError(f'Invalid value for model_class! Got "{model_class}". Class of "{Model}" expected.')
+    def __check_instance_class(instance_class):
+        if not issubclass(instance_class, Model):
+            raise TypeError(f'Invalid value for instance_class! Got "{instance_class}". Class of "{Model}" expected.')
 
     @staticmethod
-    def __check_model_instance(model_instance, model_class):
-        if model_instance is not None and not isinstance(model_instance, model_class):
-            raise TypeError(f'model_instance "{model_instance}" is not an instance of model_class "{model_class}". '
-                            f'model_instance and model_class need to match.')
+    def __check_instance(instance, instance_class):
+        if instance is not None and not isinstance(instance, instance_class):
+            raise TypeError(f'instance "{instance}" is not an instance of instance_class "{instance_class}". '
+                            f'instance and instance_class need to match.')

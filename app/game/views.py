@@ -1,8 +1,8 @@
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.urls import reverse
-from django.contrib import messages
 from common.enums import CrudOperations
+from common.utils.messages import Messenger
 from common.utils.user_passes_test import UserPassesTest
 from .models import Game
 from .forms import GameCreateForm, GameUpdateForm
@@ -36,6 +36,10 @@ class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         kwargs['user'] = self.request.user
         return kwargs
 
+    def form_valid(self, form):
+        Messenger.crud_success(self.request, CrudOperations.CREATE, form.instance)
+        return super().form_valid(form)
+
     def get_success_url(self):
         return reverse('game-detail', kwargs={'slug': self.object.slug})
 
@@ -58,6 +62,10 @@ class GameUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         form.fields['image'].required = False
         return form
 
+    def form_valid(self, form):
+        Messenger.crud_success(self.request, CrudOperations.UPDATE, form.instance)
+        return super().form_valid(form)
+
 
 class GameDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
     model = Game
@@ -72,5 +80,5 @@ class GameDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
         return context
 
     def delete(self, request, *args, **kwargs):
-        messages.success(request, f'Game "{self.get_object().name}" has been successfully deleted.')
+        Messenger.crud_success(self.request, CrudOperations.DELETE, self.get_object())
         return super().delete(request, *args, **kwargs)

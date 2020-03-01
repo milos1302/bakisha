@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
-from common.utils.errors import raise_validation_error
 from common.enums import ValidationErrors
+from common.utils.messages import Messenger
 from .models import Organization
 
 
@@ -16,10 +16,10 @@ class OrganizationFormBase(forms.ModelForm):
 
         if administrators is not None:
             if owner and owner not in administrators:
-                raise_validation_error(ValidationErrors.REMOVE_OWNER_FROM_ADMINS, owner.username)
+                Messenger.form_invalid(ValidationErrors.REMOVE_OWNER_FROM_ADMINS, owner.username)
             for administrator in administrators:
                 if administrator not in members:
-                    raise_validation_error(ValidationErrors.REMOVE_ADMIN_FROM_MEMBERS, administrator.username)
+                    Messenger.form_invalid(ValidationErrors.REMOVE_ADMIN_FROM_MEMBERS, administrator.username)
 
         return data
 

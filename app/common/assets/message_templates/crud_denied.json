@@ -5,7 +5,7 @@
     "DELETE": "You do not have permission to delete \"{game}\". Only \"{organization}\" administrators can delete this game."
   },
   "Organization": {
-    "CREATE": "You do not have permission to create a new organization. Only users in the \"{group}\" group have permission to create new organizations.",
+    "CREATE": "You do not have permission to create a new organization.",
     "UPDATE": "You do not have permission to update \"{organization}\". Only administrators of this organization can update it.",
     "DELETE": "You do not have permission to delete \"{organization}\". This organization can be deleted only by its owner."
   }
