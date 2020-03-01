@@ -34,6 +34,5 @@ class Game(models.Model):
     def save(self, *args, **kwargs):
         self.slug = slugify(self.name)
         self.type = self.organization.type
-        self.created_by = self.organization.created_by
         super().save(*args, **kwargs)
         resize_image(self.image.path, 300, 300)

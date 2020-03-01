@@ -7,6 +7,7 @@ from common.utils.user_passes_test import UserPassesTest
 from .models import Game
 from .forms import GameCreateForm, GameUpdateForm
 
+
 class GameListView(ListView):
     model = Game
     extra_context = {'title': 'Games'}
@@ -27,9 +28,10 @@ class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
     template_name = 'game/game_create.html'
     form_class = GameCreateForm
     extra_context = {'title': 'Create Game'}
+    crud_operation = CrudOperations.CREATE
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.CREATE, Game)
+        return UserPassesTest.user_passes_test_with_message(self.request, self.crud_operation, self.model)
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -37,7 +39,9 @@ class GameCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView):
         return kwargs
 
     def form_valid(self, form):
-        Messenger.crud_success(self.request, CrudOperations.CREATE, form.instance)
+        form.instance.created_by = self.request.user
+        form.instance.save()
+        Messenger.crud_message(self.request, self.crud_operation, self.model)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -48,9 +52,11 @@ class GameUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Game
     template_name = 'game/game_update.html'
     form_class = GameUpdateForm
+    crud_operation = CrudOperations.UPDATE
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.UPDATE, Game, self.get_object())
+        return UserPassesTest.user_passes_test_with_message(self.request, self.crud_operation,
+                                                            self.model, self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -63,16 +69,18 @@ class GameUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
         return form
 
     def form_valid(self, form):
-        Messenger.crud_success(self.request, CrudOperations.UPDATE, form.instance)
+        Messenger.crud_message(self.request, self.crud_operation, self.model)
         return super().form_valid(form)
 
 
 class GameDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
     model = Game
     success_url = '/games'
+    crud_operation = CrudOperations.DELETE
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.DELETE, Game, self.get_object())
+        return UserPassesTest.user_passes_test_with_message(self.request, self.crud_operation,
+                                                            self.model, self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -80,5 +88,5 @@ class GameDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
         return context
 
     def delete(self, request, *args, **kwargs):
-        Messenger.crud_success(self.request, CrudOperations.DELETE, self.get_object())
+        Messenger.crud_message(self.request, self.crud_operation, self.model)
         return super().delete(request, *args, **kwargs)

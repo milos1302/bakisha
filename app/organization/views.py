@@ -28,14 +28,15 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
     template_name = 'organization/organization_create.html'
     fields = ['name', 'type']
     extra_context = {'title': 'Create Organization'}
+    crud_operation = CrudOperations.CREATE
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.CREATE, Organization)
+        return UserPassesTest.user_passes_test_with_message(self.request, self.crud_operation, self.model)
 
     def form_valid(self, form):
         form.instance.created_by = self.request.user
         form.instance.owner = self.request.user
-        Messenger.crud_success(self.request, CrudOperations.CREATE, form.instance)
+        Messenger.crud_message(self.request, self.crud_operation, self.model)
         return super().form_valid(form)
 
     def get_success_url(self):
@@ -45,10 +46,11 @@ class OrganizationCreateView(UserPassesTestMixin, LoginRequiredMixin, CreateView
 class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView):
     model = Organization
     template_name = 'organization/organization_update.html'
+    crud_operation = CrudOperations.UPDATE
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.UPDATE,
-                                                            Organization, self.get_object())
+        return UserPassesTest.user_passes_test_with_message(self.request, self.crud_operation,
+                                                            self.model, self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -68,17 +70,18 @@ class OrganizationUpdateView(UserPassesTestMixin, LoginRequiredMixin, UpdateView
         return kwargs
 
     def form_valid(self, form):
-        Messenger.crud_success(self.request, CrudOperations.UPDATE, form.instance)
+        Messenger.crud_message(self.request, self.crud_operation, self.model)
         return super().form_valid(form)
 
 
 class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView):
     model = Organization
     success_url = '/organizations'
+    crud_operation = CrudOperations.DELETE
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.DELETE,
-                                                            Organization, self.get_object())
+        return UserPassesTest.user_passes_test_with_message(self.request, self.crud_operation,
+                                                            self.model, self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -86,5 +89,5 @@ class OrganizationDeleteView(UserPassesTestMixin, LoginRequiredMixin, DeleteView
         return context
 
     def delete(self, request, *args, **kwargs):
-        Messenger.crud_success(self.request, CrudOperations.DELETE, self.get_object())
+        Messenger.crud_message(self.request, self.crud_operation, self.model)
         return super().delete(request, *args, **kwargs)

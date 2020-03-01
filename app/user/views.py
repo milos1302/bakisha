@@ -69,10 +69,11 @@ class AccountDeactivateView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
     model = Account
     success_url = '/'
     template_name_suffix = '_confirm_deactivate'
+    crud_operation = CrudOperations.DEACTIVATE
 
     def test_func(self):
-        return UserPassesTest.user_passes_test_with_message(self.request, CrudOperations.DELETE,
-                                                            Account, self.get_object())
+        return UserPassesTest.user_passes_test_with_message(self.request, self.crud_operation,
+                                                            self.model, self.get_object())
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -83,5 +84,5 @@ class AccountDeactivateView(LoginRequiredMixin, UserPassesTestMixin, DeleteView)
         account = self.get_object()
         account.user.is_active = False
         account.user.save()
-        Messenger.crud_success(self.request, CrudOperations.DELETE, account)
+        Messenger.crud_message(self.request, self.crud_operation, self.model)
         return HttpResponseRedirect(self.success_url)

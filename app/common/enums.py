@@ -3,9 +3,10 @@ from enum import Enum, unique
 
 @unique
 class CrudOperations(Enum):
-    CREATE = 'CREATE'
-    UPDATE = 'UPDATE'
-    DELETE = 'DELETE'
+    CREATE = 'create'
+    UPDATE = 'update'
+    DELETE = 'delete'
+    DEACTIVATE = 'deactivate'
 
 
 @unique

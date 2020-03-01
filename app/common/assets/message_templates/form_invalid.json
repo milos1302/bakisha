@@ -1,4 +1,0 @@
-{
-  "remove_owner_from_admins": "You can't remove user \"{username}\" from the Administrators because they are the owner of the organization!",
-  "remove_admin_from_members": "User \"{username}\" must be a Member because they are an Administrator of the organization!"
-}

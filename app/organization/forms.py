@@ -16,10 +16,10 @@ class OrganizationFormBase(forms.ModelForm):
 
         if administrators is not None:
             if owner and owner not in administrators:
-                Messenger.form_invalid(ValidationErrors.REMOVE_OWNER_FROM_ADMINS, owner.username)
+                Messenger.form_invalid(ValidationErrors.REMOVE_OWNER_FROM_ADMINS)
             for administrator in administrators:
                 if administrator not in members:
-                    Messenger.form_invalid(ValidationErrors.REMOVE_ADMIN_FROM_MEMBERS, administrator.username)
+                    Messenger.form_invalid(ValidationErrors.REMOVE_ADMIN_FROM_MEMBERS)
 
         return data
 
@@ -55,7 +55,3 @@ class OrganizationOwnerUpdateForm(OrganizationUpdateForm):
             'members': forms.CheckboxSelectMultiple,
             'administrators': forms.CheckboxSelectMultiple
         }
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
-        self.fields['administrators'].queryset = User.objects.filter(groups__name='Administrators')

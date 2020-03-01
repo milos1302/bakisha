@@ -1,0 +1,6 @@
+{
+  "crud_success": "{model} has been successfully {action}.",
+  "crud_denied": "You do not have permission to {action} {model}!",
+  "form_invalid__remove_owner_from_admins": "You can't remove the owner of organization from the administrators!",
+  "form_invalid__remove_admin_from_members": "All administrators of an organization must also be members of that organization!"
+}
