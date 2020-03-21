@@ -14,4 +14,4 @@ def is_org_admin(user, org=None):
     """
     if org:
         return org.administrators.filter(id=user.id).exists()
-    return user.administrating_organizations.first() is not None
+    return user.is_authenticated and user.administrating_organizations.first() is not None
